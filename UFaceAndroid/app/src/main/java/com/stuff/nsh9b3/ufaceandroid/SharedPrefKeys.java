@@ -6,4 +6,6 @@ package com.stuff.nsh9b3.ufaceandroid;
 
 public interface SharedPrefKeys
 {
+    String SERVICE_LIST = "serv_list";
+    String SERVICE_NAME = "serv_name";
 }
