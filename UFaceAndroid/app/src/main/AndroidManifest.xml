@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AuthenticateWebService" />
-        <activity android:name=".RegisterWebService"></activity>
+        <activity android:name=".RegisterWebService" />
+        <activity android:name=".SelectNewService"></activity>
     </application>
 
 </manifest>
