@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // List of layouts (rows of services) to place new services
     private ArrayList<LinearLayout> layoutList;
 
+    private Button addButton;
+
     // These are offset values so btns and layouts have different IDs
     private final static int btnIDOffset = 1000;
     private final static int layIDOffset = 100;
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         // Get the add button and set the listener to this activity (which is a clickListener)
-        final Button addButton = (Button)findViewById(R.id.btn_add);
+        addButton = (Button)findViewById(R.id.btn_add);
         addButton.setOnClickListener(this);
 
         getServices();
@@ -131,8 +134,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnParams.weight = 1;
 
         newServiceBtn.setLayoutParams(btnParams);
-        newServiceBtn.setText(serviceName);// + " - " + userID + " - " + userIndex);
+        newServiceBtn.setText(serviceName);
         newServiceBtn.setId(buttonList.size() + btnIDOffset);
+        newServiceBtn.setEnabled(false);
         newServiceBtn.setOnClickListener(this);
 
         childLayout.addView(newServiceBtn);
@@ -142,6 +146,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onTaskCompleted()
     {
-        // TODO: show the buttons if the key exists
+        if(paillier != null)
+        {
+            // Allow user to add new Service or authenticate with existing
+            addButton.setEnabled(true);
+
+            for(Button btn : buttonList)
+            {
+                btn.setEnabled(true);
+            }
+        }
+        else
+        {
+            Toast.makeText(getBaseContext(), "Could not get the public key!", Toast.LENGTH_LONG).show();
+        }
     }
 }
