@@ -21,11 +21,18 @@ import java.util.List;
 
 public class GetServiceList extends AsyncTask
 {
+    OnAsyncTaskComplete listener;
+    List<WebService> services;
+
+    public GetServiceList(OnAsyncTaskComplete listener, List<WebService> services)
+    {
+        this.listener = listener;
+        this.services = services;
+    }
+
     @Override
     protected Object doInBackground(Object[] objects)
     {
-        List<WebService> services = new ArrayList<>();
-
         // Create the string to obtain the public key
         StringBuilder sb = new StringBuilder();
         sb.append("http://");
@@ -80,5 +87,11 @@ public class GetServiceList extends AsyncTask
         }
 
         return services;
+    }
+
+    @Override
+    protected void onPostExecute(Object o)
+    {
+        listener.onTaskCompleted();
     }
 }

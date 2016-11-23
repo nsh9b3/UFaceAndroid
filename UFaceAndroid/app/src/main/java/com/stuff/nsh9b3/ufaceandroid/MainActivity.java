@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // These are offset values so btns and layouts have different IDs
     private final static int btnIDOffset = 1000;
     private final static int layIDOffset = 100;
+
+    public static ArrayList<WebService> serviceList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,22 +63,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         buttonList = new ArrayList<>();
         layoutList = new ArrayList<>();
-
+        serviceList = new ArrayList<>();
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Set<String> servList = sharedPref.getStringSet(SharedPrefKeys.SERVICE_LIST, new HashSet<String>());
 
-        /*for (Iterator<String> it = servList.iterator(); it.hasNext(); ) {
+        for (Iterator<String> it = servList.iterator(); it.hasNext(); ) {
+            // Get the name
             String service = it.next();
+
+            // Get the object from the name
+            Gson gson = new Gson();
+            String json = sharedPref.getString(service, "");
+            WebService webService = gson.fromJson(json, WebService.class);
+
+            // Add to list of services
+            serviceList.add(webService);
+
+            // Create an icon on the home screen
             makeNewServiceIcon(service);
-        }*/
+        }
     }
 
     private void makeNewServiceIcon(String serviceName)
     {
         LinearLayout parentLayout = (LinearLayout)findViewById(R.id.ll_parent);
 
-        int row = (int) (buttonList.size() / 3);
         int col = buttonList.size() % 3;
 
         LinearLayout childLayout;
