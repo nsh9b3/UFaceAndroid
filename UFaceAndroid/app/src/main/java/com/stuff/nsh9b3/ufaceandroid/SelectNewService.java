@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 public class SelectNewService extends AppCompatActivity
 {
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

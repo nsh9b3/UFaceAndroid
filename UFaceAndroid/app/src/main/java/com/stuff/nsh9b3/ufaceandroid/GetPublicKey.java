@@ -27,14 +27,12 @@ public class GetPublicKey extends AsyncTask
         // Create the string to obtain the public key
         StringBuilder sb = new StringBuilder();
         sb.append("http://");
-        sb.append(Configurations.UFACE_DATA_ADDRESS);
-        sb.append(":");
-        sb.append(Configurations.UFACE_DATA_PORT);
+        sb.append(Configurations.UFACE_KEY_ADDRESS);
         sb.append("/");
         sb.append(Configurations.UFACE_PUBLIC_KEY);
 
         // Create a link between Client and UFace key server to obtain public key
-        URL url = null;
+        URL url;
         HttpURLConnection conn = null;
         try
         {
@@ -45,7 +43,7 @@ public class GetPublicKey extends AsyncTask
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             sb = new StringBuilder();
-            String line = null;
+            String line;
             while((line = br.readLine()) != null)
             {
                 sb.append(line).append("\n");

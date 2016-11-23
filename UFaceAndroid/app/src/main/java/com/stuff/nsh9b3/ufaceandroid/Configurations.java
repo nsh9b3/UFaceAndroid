@@ -12,10 +12,12 @@ public interface Configurations
     boolean USE_EXTRA_SPACE_IN_BIG_INTS = false;
 
     String UFACE_DATA_ADDRESS = "";
-    String UFACE_DATA_PORT = "";
+    String UFACE_KEY_ADDRESS = "";
 
     String UFACE_PUBLIC_KEY = "public_key";
     String UFACE_PUBLIC_KEY_NAME = "Public";
+    String UFACE_SERVICE_LIST = "service_list";
+    String UFACE_SERVICE_LIST_NAME = "Services";
 
     int GRID_ROWS = 4;
     int GRID_COLS = GRID_ROWS;
