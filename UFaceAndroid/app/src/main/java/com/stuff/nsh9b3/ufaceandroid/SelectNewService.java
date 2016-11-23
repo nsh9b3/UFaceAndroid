@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class SelectNewService extends AppCompatActivity implements OnAsyncTaskComplete
 {
@@ -51,6 +52,13 @@ public class SelectNewService extends AppCompatActivity implements OnAsyncTaskCo
     @Override
     public void onTaskCompleted()
     {
+        // Remove any service from the list if it's already been registered with
+        for(ListIterator<WebService> iter = MainActivity.serviceList.listIterator(); iter.hasNext();)
+        {
+            services.remove(iter.next());
+        }
+
+        // Show the list to the user
         adapterServices = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, services);
         listViewServices.setAdapter(adapterServices);
         listViewServices.setOnItemClickListener(new AdapterView.OnItemClickListener()
