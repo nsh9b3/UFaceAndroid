@@ -18,12 +18,17 @@ import java.net.URL;
 
 public class GetPublicKey extends AsyncTask
 {
+    OnAsyncTaskComplete listener;
+    Paillier paillier;
+
+    public GetPublicKey(OnAsyncTaskComplete listener, Paillier paillier)
+    {
+        this.listener = listener;
+        this.paillier = paillier;
+    }
     @Override
     protected Paillier doInBackground(Object[] objects)
     {
-        // Paillier public key
-        Paillier paillier = null;
-
         // Create the string to obtain the public key
         StringBuilder sb = new StringBuilder();
         sb.append("http://");
@@ -72,5 +77,11 @@ public class GetPublicKey extends AsyncTask
         }
 
         return paillier;
+    }
+
+    @Override
+    protected void onPostExecute(Object o)
+    {
+        listener.onTaskCompleted();
     }
 }

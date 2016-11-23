@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnAsyncTaskComplete
 {
     // List of Buttons (services) a user can select
     public static ArrayList<Button> buttonList;
@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static ArrayList<WebService> serviceList;
 
+    public static Paillier paillier;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -41,6 +43,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Get the add button and set the listener to this activity (which is a clickListener)
         final Button addButton = (Button)findViewById(R.id.btn_add);
         addButton.setOnClickListener(this);
+
+        getServices();
+
+        paillier = null;
+        GetPublicKey getPublicKey = new GetPublicKey(this, paillier);
+        getPublicKey.execute();
     }
 
     @Override
@@ -129,5 +137,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         childLayout.addView(newServiceBtn);
         buttonList.add(newServiceBtn);
+    }
+
+    @Override
+    public void onTaskCompleted()
+    {
+        // TODO: show the buttons if the key exists
     }
 }
