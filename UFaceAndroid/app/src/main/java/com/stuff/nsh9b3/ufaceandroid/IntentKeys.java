@@ -6,8 +6,7 @@ package com.stuff.nsh9b3.ufaceandroid;
 
 public interface IntentKeys
 {
-    String USER_NAME = "user_name";
-    String USER_INDEX = "user_index";
     String SERVICE_NAME = "serv_name";
     String SERVICE_URL = "serv_url";
+    int REQUEST_TAKE_PHOTO = 1;
 }

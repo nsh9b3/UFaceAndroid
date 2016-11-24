@@ -18,6 +18,9 @@ public interface Configurations
     String UFACE_PUBLIC_KEY_NAME = "Public";
     String UFACE_SERVICE_LIST = "service_list";
     String UFACE_SERVICE_LIST_NAME = "Services";
+    String SERVICE_ADD_USER = "add_user";
+    String SERVICE_USER_KEY = "User";
+    String SERVICE_SERVICE_KEY = "Service";
 
     int GRID_ROWS = 4;
     int GRID_COLS = GRID_ROWS;

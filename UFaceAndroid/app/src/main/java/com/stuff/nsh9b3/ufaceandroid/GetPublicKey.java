@@ -44,6 +44,7 @@ public class GetPublicKey extends AsyncTask
             // Open the URL for the public key
             url = new URL(sb.toString());
             conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
             conn.connect();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
