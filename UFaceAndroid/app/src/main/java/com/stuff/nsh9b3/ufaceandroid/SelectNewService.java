@@ -20,7 +20,7 @@ public class SelectNewService extends AppCompatActivity implements OnAsyncTaskCo
 {
     ListView listViewServices;
     TextView textViewSelectedService;
-    ArrayAdapter<WebService> adapterServices;
+    ArrayAdapter<String> adapterServices;
     Button buttonSaveSelection;
     List<WebService> services;
 
@@ -52,14 +52,21 @@ public class SelectNewService extends AppCompatActivity implements OnAsyncTaskCo
     @Override
     public void onTaskCompleted(Object obj)
     {
+        services = (ArrayList<WebService>) obj;
         // Remove any service from the list if it's already been registered with
         for(ListIterator<WebService> iter = MainActivity.serviceList.listIterator(); iter.hasNext();)
         {
             services.remove(iter.next());
         }
 
+        List<String> serviceNames = new ArrayList<>();
+        for(WebService service : services)
+        {
+            serviceNames.add(service.name);
+        }
+
         // Show the list to the user
-        adapterServices = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, services);
+        adapterServices = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, serviceNames);
         listViewServices.setAdapter(adapterServices);
         listViewServices.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
