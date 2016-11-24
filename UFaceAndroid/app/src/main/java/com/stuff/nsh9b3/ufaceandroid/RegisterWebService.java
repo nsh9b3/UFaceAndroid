@@ -1,9 +1,6 @@
 package com.stuff.nsh9b3.ufaceandroid;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,11 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class RegisterWebService extends AppCompatActivity implements TextWatcher, View.OnClickListener, OnAsyncTaskComplete
@@ -47,7 +40,7 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
 
         Intent passedIntent = getIntent();
         Bundle extras = passedIntent.getExtras();
-        webServiceAddress = extras.getString(IntentKeys.SERVICE_URL);
+        webServiceAddress = extras.getString(IntentKeys.SERVICE_ADDRESS);
         webServiceName = extras.getString(IntentKeys.SERVICE_NAME);
 
         userIDs = new HashMap<>();

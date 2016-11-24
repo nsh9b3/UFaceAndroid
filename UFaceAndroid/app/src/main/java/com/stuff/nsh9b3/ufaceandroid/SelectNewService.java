@@ -1,8 +1,6 @@
 package com.stuff.nsh9b3.ufaceandroid;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,8 +19,9 @@ public class SelectNewService extends AppCompatActivity implements OnAsyncTaskCo
     ListView listViewServices;
     TextView textViewSelectedService;
     ArrayAdapter<String> adapterServices;
-    Button buttonSaveSelection;
+    Button btnSaveSelection;
     List<WebService> services;
+    int selectedServiceIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,15 +31,18 @@ public class SelectNewService extends AppCompatActivity implements OnAsyncTaskCo
 
         listViewServices = (ListView)findViewById(R.id.lv_services);
         textViewSelectedService = (TextView)findViewById(R.id.tv_selectedService);
-        buttonSaveSelection = (Button)findViewById(R.id.btn_saveSelection);
+        btnSaveSelection = (Button)findViewById(R.id.btn_saveSelection);
 
-        buttonSaveSelection.setOnClickListener(new View.OnClickListener()
+        btnSaveSelection.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
+                WebService selectedService = services.get(selectedServiceIndex);
                 Intent registerServiceIntent = new Intent(getBaseContext(), RegisterWebService.class);
-
+                registerServiceIntent.putExtra(IntentKeys.SERVICE_NAME, selectedService.name);
+                registerServiceIntent.putExtra(IntentKeys.SERVICE_ADDRESS, selectedService.address);
+                startActivityForResult(registerServiceIntent, IntentKeys.REGISTER_NEW_SERVICE);
             }
         });
 
@@ -73,8 +75,10 @@ public class SelectNewService extends AppCompatActivity implements OnAsyncTaskCo
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
             {
-                WebService selectedService = (WebService)adapterView.getItemAtPosition(i);
-                textViewSelectedService.setText(selectedService.name);
+                String serviceName = (String)adapterView.getItemAtPosition(i);
+                selectedServiceIndex = i;
+                textViewSelectedService.setText(serviceName);
+                btnSaveSelection.setEnabled(true);
             }
         });
     }
