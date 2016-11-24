@@ -58,6 +58,7 @@ public class GetPublicKey extends AsyncTask
 
             // Something is odd about the JSON and adds a whole bunch of '\'s
             String response = sb.toString().replaceAll("\\\\", "");
+            response = response.substring(1, response.length() - 2);
             JSONObject jResponse = new JSONObject(response);
             JSONObject jPublicKey = jResponse.getJSONObject(Configurations.UFACE_PUBLIC_KEY_NAME);
 
@@ -77,12 +78,12 @@ public class GetPublicKey extends AsyncTask
             conn.disconnect();
         }
 
-        return paillier;
+        return null;
     }
 
     @Override
     protected void onPostExecute(Object o)
     {
-        listener.onTaskCompleted();
+        listener.onTaskCompleted(paillier);
     }
 }

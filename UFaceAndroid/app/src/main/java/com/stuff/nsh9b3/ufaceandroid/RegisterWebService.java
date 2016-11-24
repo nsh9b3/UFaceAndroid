@@ -134,7 +134,7 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
 
 
     @Override
-    public void onTaskCompleted()
+    public void onTaskCompleted(Object obj)
     {
         if(checkName)
         {

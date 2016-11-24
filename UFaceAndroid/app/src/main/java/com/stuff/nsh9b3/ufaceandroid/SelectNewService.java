@@ -50,7 +50,7 @@ public class SelectNewService extends AppCompatActivity implements OnAsyncTaskCo
     }
 
     @Override
-    public void onTaskCompleted()
+    public void onTaskCompleted(Object obj)
     {
         // Remove any service from the list if it's already been registered with
         for(ListIterator<WebService> iter = MainActivity.serviceList.listIterator(); iter.hasNext();)

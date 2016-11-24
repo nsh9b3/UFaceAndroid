@@ -6,5 +6,5 @@ package com.stuff.nsh9b3.ufaceandroid;
 
 public interface OnAsyncTaskComplete
 {
-    void onTaskCompleted();
+    void onTaskCompleted(Object obj);
 }

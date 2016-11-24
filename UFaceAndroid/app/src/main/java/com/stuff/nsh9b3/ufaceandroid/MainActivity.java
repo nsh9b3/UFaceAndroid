@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // If the add button was pressed, register a new web service
             case R.id.btn_add:
                 Intent newServiceIntent = new Intent(this, SelectNewService.class);
+                startActivityForResult(newServiceIntent, IntentKeys.REGISTER_NEW_SERVICE);
                 break;
             // Otherwise, authenticate a user on a specific web service
             default:
@@ -144,8 +145,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onTaskCompleted()
+    public void onTaskCompleted(Object obj)
     {
+        this.paillier = (Paillier) obj;
         if(paillier != null)
         {
             // Allow user to add new Service or authenticate with existing

@@ -108,6 +108,6 @@ public class CheckValidName extends AsyncTask
     @Override
     protected void onPostExecute(Object o)
     {
-        listener.onTaskCompleted();
+        listener.onTaskCompleted(null);
     }
 }
