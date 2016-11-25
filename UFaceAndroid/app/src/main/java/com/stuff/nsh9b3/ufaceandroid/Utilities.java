@@ -97,21 +97,17 @@ public class Utilities
         return image;
     }
 
-    public static int[][] convertImageToFV(Bitmap bitmap)
+    public static int[][] splitImageIntoSections(Bitmap bitmap)
     {
-        int bitmapWidth = bitmap.getWidth();
-        int bitmapHeight = bitmap.getHeight();
-        int gridSize = Configurations.GRID_SIZE;
-        int gridWidth = Configurations.GRID_COLS;
-        int gridHeight = Configurations.GRID_ROWS;
-        int sectionWidth = bitmapWidth/gridWidth;
-        int sectionHeight = bitmapHeight/gridHeight;
-        int[][] pixelMap = new int[gridSize][sectionWidth*sectionHeight];
+        int[][] pixelMap = new int[Configurations.GRID_SIZE][Configurations.SECTION_PIXEL_SIZE];
 
-        for(int i = 0; i < gridSize; i++)
+        for(int i = 0; i < Configurations.GRID_SIZE; i++)
         {
-            int[] secPixels = new int[sectionWidth*sectionHeight];
-            bitmap.getPixels(secPixels, 0, sectionWidth, (i % Configurations.GRID_COLS) * sectionWidth, (i / Configurations.GRID_ROWS) * sectionHeight, sectionWidth, sectionHeight);
+            int[] secPixels = new int[Configurations.SECTION_PIXEL_SIZE];
+            bitmap.getPixels(secPixels, 0, Configurations.SECTION_PIXEL_COLS,
+                    (i % Configurations.GRID_COLS) * Configurations.SECTION_PIXEL_COLS,
+                    (i / Configurations.GRID_ROWS) * Configurations.SECTION_PIXEL_ROWS,
+                    Configurations.SECTION_PIXEL_COLS, Configurations.SECTION_PIXEL_ROWS);
             pixelMap[i] = secPixels;
         }
 

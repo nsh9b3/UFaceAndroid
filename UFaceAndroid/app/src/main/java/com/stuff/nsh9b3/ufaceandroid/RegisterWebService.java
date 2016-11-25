@@ -132,7 +132,7 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
             if(resultCode == RESULT_OK)
             {
                 Bitmap image = Utilities.resizeImage(imagePath);
-
+                int[][] fv = Utilities.splitImageIntoSections(image);
                 // TODO: create fv
                 // TODO: encrypt
                 // TODO: send info off
