@@ -1,6 +1,7 @@
 package com.stuff.nsh9b3.ufaceandroid;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +38,7 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
     boolean checkName = false;
     boolean validName = false;
     boolean registerUser = false;
+    String imagePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -115,7 +118,7 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
             case R.id.btn_register_take_photo:
                 registerUser = true;
                 userIndex = userIDs.get(userID);
-                Utilities.takePhoto(this);
+                imagePath = Utilities.takePhoto(this);
                 break;
         }
     }
@@ -128,7 +131,8 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
         {
             if(resultCode == RESULT_OK)
             {
-                // TODO: shrink photo
+                Bitmap image = Utilities.resizeImage(imagePath);
+
                 // TODO: create fv
                 // TODO: encrypt
                 // TODO: send info off
