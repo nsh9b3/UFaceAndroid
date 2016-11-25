@@ -64,7 +64,7 @@ public class Utilities
             {
                 // Take a picture and place the information in the newly created file
                 Uri photoURI = FileProvider.getUriForFile(activity.getBaseContext().getApplicationContext(),
-                        "com.stuff.nsh9b3.uface.fileprovider",
+                        "com.stuff.nsh9b3.ufaceandroid.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 activity.startActivityForResult(takePictureIntent, IntentKeys.REQUEST_TAKE_PHOTO);
