@@ -14,7 +14,7 @@ public class LBP
     // Keys for histogram containing uniform numbers only
     private static HashMap<Integer, Integer> histogramKeys;
 
-    public static byte[][] generateFeatureVector(int[][] pixels)
+    public static int[][] generateFeatureVector(int[][] pixels)
     {
         int[][] featureVector = new int[Configurations.GRID_SIZE][Configurations.BINS];
 
@@ -27,6 +27,8 @@ public class LBP
             featureVector[i] = generateRegionHistogram(pixels, i);
         }
 
+        /*
+        // Count the size... if needed
         int labelCount = 0;
         for(int i = 0; i < featureVector.length; i++)
         {
@@ -38,8 +40,9 @@ public class LBP
             labelCount += histCount;
         }
         Log.d("TAG", "count: " + labelCount);
+*/
 
-        return null;//splitEncryptions(convertMatToArray(featureVector, Config.NUMBINS, Config.NUMSEC));
+        return featureVector;//splitEncryptions(convertMatToArray(featureVector, Config.NUMBINS, Config.NUMSEC));
     }
 
     private static int[] generateRegionHistogram(int[][] pixels, int region)

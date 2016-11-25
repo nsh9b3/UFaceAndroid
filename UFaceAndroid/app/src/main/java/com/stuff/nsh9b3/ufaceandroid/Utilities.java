@@ -140,4 +140,9 @@ public class Utilities
 
         return resizeBitmap;
     }
+
+    public static byte[][] splitFVForEncryption(int[][] intFV)
+    {
+        return null;
+    }
 }

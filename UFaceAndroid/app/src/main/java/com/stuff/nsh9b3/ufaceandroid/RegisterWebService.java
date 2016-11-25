@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -132,9 +133,11 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
             if(resultCode == RESULT_OK)
             {
                 Bitmap image = Utilities.resizeImage(imagePath);
-                int[][] intFV = Utilities.splitImageIntoSections(image);
-                byte[][] byteFV = LBP.generateFeatureVector(intFV);
-                // TODO: create fv
+                int[][] splitImage = Utilities.splitImageIntoSections(image);
+                int[][] intFV = LBP.generateFeatureVector(splitImage);
+                byte[][] byteFV = Utilities.splitFVForEncryption(intFV);
+                // TODO: Split ints into bytes
+                //String password = encryptFV(byteFV);
                 // TODO: encrypt
                 // TODO: send info off
             }
@@ -186,4 +189,24 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
             registerUser = false;
         }
     }
+
+    private String encryptFV(byte[][] byteFV)
+    {
+        BigInteger[] encryptedFV = new BigInteger[Configurations.BIG_INTS_IN_FEATURE_VECTOR];
+
+        for(int i = 0; i < Configurations.BIG_INTS_IN_FEATURE_VECTOR; i++)
+        {
+            BigInteger bigInt = new BigInteger(byteFV[i]);
+            encryptedFV[i] = MainActivity.paillier.Encryption(bigInt);
+        }
+
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < encryptedFV.length; i++)
+        {
+            sb.append(encryptedFV[i]).append(" ");
+        }
+
+        return sb.toString();
+    }
+
 }
