@@ -1,6 +1,7 @@
 package com.stuff.nsh9b3.ufaceandroid;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +10,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInput;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -42,9 +44,7 @@ public class CheckValidName extends AsyncTask
     {
         // Create the string to obtain the public key
         StringBuilder sb = new StringBuilder();
-        sb.append("http://");
         sb.append(address);
-        sb.append("/");
         sb.append(Configurations.SERVICE_ADD_USER);
 
         URL url;
@@ -108,6 +108,16 @@ public class CheckValidName extends AsyncTask
     @Override
     protected void onPostExecute(Object o)
     {
-        listener.onTaskCompleted(null);
+        JSONObject jObject = new JSONObject();
+
+        try
+        {
+            jObject.accumulate(AsyncTaskKeys.IS_VALID, validName);
+            jObject.accumulate(AsyncTaskKeys.USER_INDEX, userIndex);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        listener.onTaskCompleted(jObject);
     }
 }

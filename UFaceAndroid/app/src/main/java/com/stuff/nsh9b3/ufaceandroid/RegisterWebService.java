@@ -8,9 +8,13 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +25,7 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
     private Button btnValidate;
     private EditText etUserID;
     private ProgressBar pbValidMark;
+    private ImageView ivValidMark;
 
     private String webServiceAddress;
     private String webServiceName;
@@ -58,6 +63,7 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
         etUserID.addTextChangedListener(this);
 
         pbValidMark = (ProgressBar)findViewById(R.id.pb_register_is_valid);
+        ivValidMark = (ImageView)findViewById(R.id.iv_register_valid_mark);
     }
 
     @Override
@@ -70,6 +76,7 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
     {
         pbValidMark.setVisibility(View.GONE);
+        ivValidMark.setVisibility(View.GONE);
         btnRegister.setEnabled(false);
     }
 
@@ -85,13 +92,17 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
         switch(view.getId())
         {
             case R.id.btn_register_check_name:
+                pbValidMark.setVisibility(View.VISIBLE);
+                ivValidMark.setVisibility(View.GONE);
                 userID = etUserID.getText().toString();
 
                 // If it's in the list already, it's already been checked
                 if (userIDs.containsKey(userID))
                 {
                     btnRegister.setEnabled(true);
-                    Toast.makeText(getBaseContext(), "The name %s has already been verified as valid.", Toast.LENGTH_LONG).show();
+                    pbValidMark.setVisibility(View.GONE);
+                    ivValidMark.setVisibility(View.VISIBLE);
+                    Toast.makeText(getBaseContext(), String.format("The name %s has already been verified as valid.", userID), Toast.LENGTH_LONG).show();
                 } else
                 {
                     // Otherwise, check the name to see if it's valid
@@ -129,16 +140,30 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
     @Override
     public void onTaskCompleted(Object obj)
     {
+        JSONObject jObject = (JSONObject) obj;
+        try
+        {
+            validName = jObject.getBoolean(AsyncTaskKeys.IS_VALID);
+            userIndex = jObject.getInt(AsyncTaskKeys.USER_INDEX);
+        } catch(JSONException e)
+        {
+            e.printStackTrace();
+        }
         if(checkName)
         {
+            pbValidMark.setVisibility(View.GONE);
             if(validName)
             {
                 btnRegister.setEnabled(true);
                 userIDs.put(userID, userIndex);
+                ivValidMark.setVisibility(View.VISIBLE);
+                ivValidMark.setBackgroundResource(R.drawable.check);
             }
             else
             {
                 userIDs.remove(userID);
+                ivValidMark.setVisibility(View.VISIBLE);
+                ivValidMark.setBackgroundResource(R.drawable.close);
                 Toast.makeText(getBaseContext(), String.format("The name %s is already in use.", userID), Toast.LENGTH_LONG).show();
             }
             validName = false;

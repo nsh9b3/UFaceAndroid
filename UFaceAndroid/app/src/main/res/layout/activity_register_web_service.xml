@@ -44,7 +44,7 @@
             android:text="Check ID validity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"/>
+            android:layout_weight="4"/>
 
         <ProgressBar
             style="?android:attr/progressBarStyleSmall"
@@ -52,14 +52,14 @@
             android:indeterminate="true"
             android:layout_height="match_parent"
             android:id="@+id/pb_register_is_valid"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:visibility="gone"/>
 
         <ImageView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:id="@+id/im_register_valid_mark"
-            android:layout_weight="2"
+            android:id="@+id/iv_register_valid_mark"
+            android:layout_weight="1"
             android:visibility="gone"/>
 
     </LinearLayout>
