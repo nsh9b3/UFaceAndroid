@@ -37,23 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static Paillier paillier;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == IntentKeys.SELECT_NEW_SERVICE)
-        {
-            if(resultCode == RESULT_OK)
-            {
-                Bundle extras = data.getExtras();
-
-                if(extras.getBoolean(IntentKeys.REGISTRATION_PASS))
-                {
-
-                }
-            }
-        }
-    }
+    private boolean gotKey = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -89,6 +73,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == IntentKeys.SELECT_NEW_SERVICE)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                Bundle extras = data.getExtras();
+
+                if(extras.getBoolean(IntentKeys.REGISTRATION_PASS))
+                {
+                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = sharedPref.edit();
+
+                    WebService newService = new WebService(extras.getString(IntentKeys.SERVICE_NAME),
+                            extras.getString(IntentKeys.SERVICE_ADDRESS),
+                            extras.getString(IntentKeys.USER_NAME),
+                            extras.getInt(IntentKeys.USER_INDEX));
+
+                    // Add to list of services
+                    serviceList.add(newService);
+
+                    Gson gson = new Gson();
+                    String json = gson.toJson(newService);
+                    Set<String> servList = sharedPref.getStringSet(SharedPrefKeys.SERVICE_LIST, new HashSet<String>());
+                    servList.add(json);
+                    editor.putStringSet(SharedPrefKeys.SERVICE_LIST, servList);
+                    editor.apply();
+
+                    makeNewServiceIcon(extras.getString(IntentKeys.SERVICE_NAME));
+                }
+            }
+        }
+    }
+
     private void getServices()
     {
         buttonList = new ArrayList<>();
@@ -100,18 +120,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         for (Iterator<String> it = servList.iterator(); it.hasNext(); ) {
             // Get the name
-            String service = it.next();
+            String json = it.next();
 
             // Get the object from the name
             Gson gson = new Gson();
-            String json = sharedPref.getString(service, "");
             WebService webService = gson.fromJson(json, WebService.class);
 
             // Add to list of services
             serviceList.add(webService);
 
             // Create an icon on the home screen
-            makeNewServiceIcon(service);
+            makeNewServiceIcon(webService.serviceName);
         }
     }
 
@@ -155,7 +174,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         newServiceBtn.setLayoutParams(btnParams);
         newServiceBtn.setText(serviceName);
         newServiceBtn.setId(buttonList.size() + btnIDOffset);
-        newServiceBtn.setEnabled(false);
+
+        if(gotKey)
+            newServiceBtn.setEnabled(true);
+        else
+            newServiceBtn.setEnabled(false);
         newServiceBtn.setOnClickListener(this);
 
         childLayout.addView(newServiceBtn);
@@ -170,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             // Allow user to add new Service or authenticate with existing
             addButton.setEnabled(true);
+            gotKey = true;
 
             for(Button btn : buttonList)
             {

@@ -42,8 +42,8 @@ public class SelectNewService extends AppCompatActivity implements OnAsyncTaskCo
             {
                 WebService selectedService = services.get(selectedServiceIndex);
                 Intent registerServiceIntent = new Intent(getBaseContext(), RegisterWebService.class);
-                registerServiceIntent.putExtra(IntentKeys.SERVICE_NAME, selectedService.name);
-                registerServiceIntent.putExtra(IntentKeys.SERVICE_ADDRESS, selectedService.address);
+                registerServiceIntent.putExtra(IntentKeys.SERVICE_NAME, selectedService.serviceName);
+                registerServiceIntent.putExtra(IntentKeys.SERVICE_ADDRESS, selectedService.serviceAddress);
                 startActivityForResult(registerServiceIntent, IntentKeys.REGISTER_NEW_SERVICE);
             }
         });
@@ -60,13 +60,20 @@ public class SelectNewService extends AppCompatActivity implements OnAsyncTaskCo
         // Remove any service from the list if it's already been registered with
         for(ListIterator<WebService> iter = MainActivity.serviceList.listIterator(); iter.hasNext();)
         {
-            services.remove(iter.next());
+            WebService savedService = iter.next();
+            for(WebService service : services)
+            {
+                if(service.serviceName.compareTo(savedService.serviceName) == 0)
+                {
+                    services.remove(service);
+                }
+            }
         }
 
         List<String> serviceNames = new ArrayList<>();
         for(WebService service : services)
         {
-            serviceNames.add(service.name);
+            serviceNames.add(service.serviceName);
         }
 
         // Show the list to the user

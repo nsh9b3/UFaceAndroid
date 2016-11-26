@@ -67,7 +67,7 @@ public class GetServiceList extends AsyncTask
             for(int i = 0; i < jServices.length(); i++)
             {
                 JSONObject jService = jServices.getJSONObject(i);
-                WebService service = new WebService(jService.getString("Name"), jService.getString("Url"));
+                WebService service = new WebService(jService.getString("Name"), jService.getString("Url"), "", -1);
                 services.add(service);
             }
 

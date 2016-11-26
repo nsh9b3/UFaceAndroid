@@ -6,12 +6,16 @@ package com.stuff.nsh9b3.ufaceandroid;
 
 public class WebService
 {
-    public String name;
-    public String address;
+    public String serviceName;
+    public String serviceAddress;
+    public String userName;
+    public int userIndex;
 
-    public WebService(String name, String address)
+    public WebService(String serviceName, String serviceAddress, String userName, int userIndex)
     {
-        this.name = name;
-        this.address = address;
+        this.serviceName = serviceName;
+        this.serviceAddress = serviceAddress;
+        this.userName = userName;
+        this.userIndex = userIndex;
     }
 }
