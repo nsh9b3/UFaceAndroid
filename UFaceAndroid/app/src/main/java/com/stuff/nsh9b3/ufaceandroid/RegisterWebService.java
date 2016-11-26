@@ -1,5 +1,6 @@
 package com.stuff.nsh9b3.ufaceandroid;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,7 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
     boolean checkName = false;
     boolean validName = false;
     boolean registerUser = false;
+    boolean registeredPass = false;
     String imagePath = "";
 
     @Override
@@ -137,10 +139,9 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
                 int[][] intFV = LBP.generateFeatureVector(splitImage);
                 int[][] splitFV = Utilities.splitFVForEncryption(intFV);
                 byte[][] byteFV = Utilities.createByteFV(splitFV);
-                // TODO: Split ints into bytes
-                //String password = encryptFV(byteFV);
-                // TODO: encrypt
-                // TODO: send info off
+                String password = encryptFV(byteFV);
+                RegisterPassword registerPassword = new RegisterPassword(this, webServiceName, userIndex, password, Configurations.LABELS_IN_FEATURE_VECTOR, registeredPass);
+                registerPassword.execute();
             }
         }
     }
@@ -150,16 +151,17 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
     public void onTaskCompleted(Object obj)
     {
         JSONObject jObject = (JSONObject) obj;
-        try
-        {
-            validName = jObject.getBoolean(AsyncTaskKeys.IS_VALID);
-            userIndex = jObject.getInt(AsyncTaskKeys.USER_INDEX);
-        } catch(JSONException e)
-        {
-            e.printStackTrace();
-        }
         if(checkName)
         {
+            try
+            {
+                validName = jObject.getBoolean(AsyncTaskKeys.IS_VALID);
+                userIndex = jObject.getInt(AsyncTaskKeys.USER_INDEX);
+            } catch(JSONException e)
+            {
+                e.printStackTrace();
+            }
+
             pbValidMark.setVisibility(View.GONE);
             if(validName)
             {
@@ -175,18 +177,38 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
                 ivValidMark.setBackgroundResource(R.drawable.close);
                 Toast.makeText(getBaseContext(), String.format("The name %s is already in use.", userID), Toast.LENGTH_LONG).show();
             }
+            checkName = false;
             validName = false;
         }
-        else
+        else if(registerUser)
         {
-            if(registerUser)
+            try
             {
-
+                registeredPass = jObject.getBoolean(AsyncTaskKeys.IS_VALID);
+            } catch(JSONException e)
+            {
+                e.printStackTrace();
+            }
+            if(registeredPass)
+            {
+                Toast.makeText(getBaseContext(), "User has been successfully registered!", Toast.LENGTH_LONG).show();
             }
             else
             {
-
+                Toast.makeText(getBaseContext(), "User failed at registering!", Toast.LENGTH_LONG).show();
             }
+
+
+            Intent doneRegistering = new Intent();
+            doneRegistering.putExtra(IntentKeys.USER_NAME, userID);
+            doneRegistering.putExtra(IntentKeys.USER_INDEX, userIndex);
+            doneRegistering.putExtra(IntentKeys.SERVICE_NAME, webServiceName);
+            doneRegistering.putExtra(IntentKeys.SERVICE_ADDRESS, webServiceAddress);
+            doneRegistering.putExtra(IntentKeys.REGISTRATION_PASS, registeredPass);
+            setResult(Activity.RESULT_OK, doneRegistering);
+            finish();
+
+            registeredPass = false;
             registerUser = false;
         }
     }

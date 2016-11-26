@@ -1,6 +1,8 @@
 package com.stuff.nsh9b3.ufaceandroid;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -81,5 +83,34 @@ public class SelectNewService extends AppCompatActivity implements OnAsyncTaskCo
                 btnSaveSelection.setEnabled(true);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == IntentKeys.REGISTER_NEW_SERVICE)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                Bundle extras = data.getExtras();
+
+                Intent doneRegistering = new Intent();
+                if(extras.getBoolean(IntentKeys.REGISTRATION_PASS))
+                {
+                    doneRegistering.putExtra(IntentKeys.USER_NAME, extras.getString(IntentKeys.USER_NAME));
+                    doneRegistering.putExtra(IntentKeys.USER_INDEX, extras.getInt(IntentKeys.USER_INDEX));
+                    doneRegistering.putExtra(IntentKeys.SERVICE_NAME, extras.getString(IntentKeys.SERVICE_NAME));
+                    doneRegistering.putExtra(IntentKeys.SERVICE_ADDRESS, extras.getString(IntentKeys.SERVICE_ADDRESS));
+                    doneRegistering.putExtra(IntentKeys.REGISTRATION_PASS, extras.getBoolean(IntentKeys.REGISTRATION_PASS));
+                }
+                else
+                {
+                    doneRegistering.putExtra(IntentKeys.REGISTRATION_PASS, extras.getBoolean(IntentKeys.REGISTRATION_PASS));
+                }
+                setResult(Activity.RESULT_OK, doneRegistering);
+                finish();
+            }
+        }
     }
 }
