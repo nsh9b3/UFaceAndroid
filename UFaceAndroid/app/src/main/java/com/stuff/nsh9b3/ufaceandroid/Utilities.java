@@ -19,7 +19,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -133,7 +136,6 @@ public class Utilities
 
     public static Bitmap resizeImage(String imagePath)
     {
-        File file = new File(imagePath);
         Bitmap origBitmap = BitmapFactory.decodeFile(imagePath);
         Bitmap grayBitmap = toGrayscale(origBitmap);
         Bitmap resizeBitmap = Bitmap.createScaledBitmap(grayBitmap, Configurations.IMAGE_PIXEL_COLS, Configurations.IMAGE_PIXEL_ROWS, true);
@@ -141,8 +143,127 @@ public class Utilities
         return resizeBitmap;
     }
 
-    public static byte[][] splitFVForEncryption(int[][] intFV)
+    public static int[][] splitFVForEncryption(int[][] intFV)
     {
-        return null;
+        int[][] splitFV = new int[Configurations.BIG_INTS_IN_FEATURE_VECTOR][Configurations.INTS_PER_BIG_INT];
+
+        int outIndex = 0;
+        int inIndex = 0;
+        for(int i = 0; i < Configurations.BIG_INTS_IN_FEATURE_VECTOR; i++)
+        {
+            for(int k = 0; k < Configurations.INTS_PER_BIG_INT; k++)
+            {
+                splitFV[i][k] = intFV[outIndex][inIndex++];
+                if(inIndex == Configurations.BINS)
+                {
+                    outIndex++;
+                    inIndex = 0;
+                    if(outIndex == Configurations.GRID_SIZE)
+                    {
+                        break;
+                    }
+                }
+            }
+            if(outIndex == Configurations.GRID_SIZE)
+            {
+                break;
+            }
+        }
+        return splitFV;
     }
+
+    public static byte[][] createByteFV(int[][] splitFV)
+    {
+        byte[][] byteFV = new byte[Configurations.BIG_INTS_IN_FEATURE_VECTOR][Configurations.BYTES_PER_BIG_INT];
+
+        for(int i = 0; i < Configurations.BIG_INTS_IN_FEATURE_VECTOR; i++)
+        {
+            int[] intArray = splitFV[i];
+
+            int leftEmptyBits = Configurations.ZERO_BITS_PER_BIG_INT;
+            byte next = 0x00;
+            int index = 0;
+            int bitsUsedPerByte = 0;
+
+            for(int k = 0; k < splitFV[i].length; k++)
+            {
+                leftEmptyBits += Configurations.ZERO_BITS_PER_INT;
+                int bitsNeededPerInt = Configurations.BITS_NEEDED_PER_INT;
+
+                int val = intArray[k];
+
+                while(bitsNeededPerInt > 0)
+                {
+                    if(leftEmptyBits >= 8)
+                    {
+                        byteFV[i][index++] = next;
+                        next = 0x00;
+                        leftEmptyBits -= 8;
+                    }
+                    else
+                    {
+                        // If we can fill the next byte with ONLY bits from the current int
+                        if (bitsNeededPerInt >= (8 - leftEmptyBits - bitsUsedPerByte))
+                        {
+                            int shiftR = bitsNeededPerInt + leftEmptyBits + bitsUsedPerByte - 8;
+                            next = (byte) (((val >>> shiftR) & 0xFF) | next);
+                            bitsNeededPerInt -= (8 - leftEmptyBits - bitsUsedPerByte);
+                            bitsUsedPerByte = 0;
+                            byteFV[i][index++] = next;
+                            next = 0x00;
+                            leftEmptyBits = 0;
+                        }
+                        else
+                        {
+                            int shiftL = 8 - bitsNeededPerInt;
+                            next = (byte) (((val << shiftL) & 0xFF) | next);
+                            bitsUsedPerByte = bitsNeededPerInt;
+                            bitsNeededPerInt = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        return byteFV;
+    }
+
+    /*public static int countByteFV(byte[][] byteFV)
+    {
+        int count = 0;
+
+        for(int i = 0; i < byteFV.length; i++)
+        {
+            int leftEmptyBits = Configurations.ZERO_BITS_PER_BIG_INT;
+            int bitsNeededPerInt = Configurations.BITS_NEEDED_PER_INT;
+            int next = 0;
+
+            for(int k = 0; k < byteFV[i].length; k++)
+            {
+                byte val = byteFV[i][k];
+
+                if(leftEmptyBits >= 8)
+                {
+                    leftEmptyBits -= 8;
+                    continue;
+                }
+                else
+                {
+                    if(bitsNeededPerInt >= 8)
+                    {
+                        int shiftL = bitsNeededPerInt + leftEmptyBits - 8;
+                        next = ((val << shiftL) & 0xFF) | next;
+                        bitsNeededPerInt -= (8 - leftEmptyBits);
+                        leftEmptyBits = 0;
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+        }
+
+        return count;
+   }*/
 }
