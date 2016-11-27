@@ -13,6 +13,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+
 public class AuthenticateWebService extends AppCompatActivity implements OnAsyncTaskComplete, View.OnClickListener
 {
     Button btnAuthenticate;
@@ -139,6 +141,8 @@ public class AuthenticateWebService extends AppCompatActivity implements OnAsync
             if(resultCode == RESULT_OK)
             {
                 Bitmap image = Utilities.resizeImage(imagePath);
+                File file = new File(imagePath);
+                file.delete();
                 int[][] splitImage = Utilities.splitImageIntoSections(image);
                 int[][] intFV = LBP.generateFeatureVector(splitImage);
                 int[][] splitFV = Utilities.splitFVForEncryption(intFV);

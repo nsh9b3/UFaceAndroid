@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -73,6 +74,7 @@ public class Utilities
             // Continue only if the File was successfully created
             if (photoFile.exists())
             {
+                Log.d("TAG", "path: " + photoFile.getAbsolutePath());
                 // Take a picture and place the information in the newly created file
                 Uri photoURI = FileProvider.getUriForFile(activity.getBaseContext().getApplicationContext(),
                         "com.stuff.nsh9b3.ufaceandroid.fileprovider",
@@ -247,4 +249,6 @@ public class Utilities
 
         return sb.toString();
     }
+
+
 }

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -125,6 +127,8 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
             if(resultCode == RESULT_OK)
             {
                 Bitmap image = Utilities.resizeImage(imagePath);
+                File file = new File(imagePath);
+                file.delete();
                 int[][] splitImage = Utilities.splitImageIntoSections(image);
                 int[][] intFV = LBP.generateFeatureVector(splitImage);
                 int[][] splitFV = Utilities.splitFVForEncryption(intFV);

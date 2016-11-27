@@ -10,8 +10,8 @@ public interface Configurations
 
     boolean USE_EXTRA_SPACE_IN_BIG_INTS = false;
 
-    String UFACE_DATA_ADDRESS = "192.168.1.232:3000";
-    String UFACE_KEY_ADDRESS = "192.168.1.232:3002";
+    String UFACE_DATA_ADDRESS = "10.106.50.72:3000";
+    String UFACE_KEY_ADDRESS = "10.106.50.72:3002";
 
     String UFACE_PUBLIC_KEY = "public_key";
     String UFACE_PUBLIC_KEY_NAME = "Public";
