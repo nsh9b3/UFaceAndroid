@@ -26,6 +26,7 @@ public interface Configurations
     String UFACE_REGISTRATION_PASSWORD = "add_password";
     String UFACE_AUTHENTICATE_USER = "authenticate_user";
     String UFACE_AUTHENTICATE_PASSWORD = "authenticate_password";
+    String UFACE_AUTHENTICATION_RESULT = "authentication_result_client";
 
     int GRID_ROWS = 4;
     int GRID_COLS = GRID_ROWS;

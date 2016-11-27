@@ -12,4 +12,6 @@ public interface AsyncTaskKeys
     String GET_RESULT = "get_result";
     String AUTH_USER = "auth_user";
     String AUTH_PASS = "auth_pass";
+    String AWAIT_AUTH_RESULT = "await_auth";
+    String CHECK_AGAIN = "check_again";
 }

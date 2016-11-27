@@ -82,11 +82,39 @@ public class AuthenticateWebService extends AppCompatActivity implements OnAsync
             case AsyncTaskKeys.AUTH_PASS:
                 if(result)
                 {
-                    Toast.makeText(getBaseContext(), "Awaiting Response!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Awaiting response!", Toast.LENGTH_LONG).show();
+                    AwaitAuthenticationResult awaitAuthenticationResult = new AwaitAuthenticationResult(this, webService);
+                    awaitAuthenticationResult.execute();
                 }
                 else
                 {
-                    Toast.makeText(getBaseContext(), "Couldn't Transmit Authentication Password!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Couldn't transmit authentication password!", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case AsyncTaskKeys.AWAIT_AUTH_RESULT:
+                if(result)
+                {
+                    Toast.makeText(getBaseContext(), "Successfully authenticated!", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    boolean checkAgain = false;
+                    try
+                    {
+                        checkAgain = jObject.getBoolean(AsyncTaskKeys.CHECK_AGAIN);
+                    } catch(JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    if(checkAgain)
+                    {
+                        AwaitAuthenticationResult awaitAuthenticationResult = new AwaitAuthenticationResult(this, webService);
+                        awaitAuthenticationResult.execute();
+                    }
+                    else
+                    {
+                        Toast.makeText(getBaseContext(), "Authentication failed!", Toast.LENGTH_LONG).show();
+                    }
                 }
                 break;
         }
