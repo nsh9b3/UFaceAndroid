@@ -27,6 +27,22 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/btn_run_batch"
+
+        android:text="BATCH"
+
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:enabled="false"/>
+
+    <Button
         android:id="@+id/btn_add"
 
         android:text="@string/plus_button"

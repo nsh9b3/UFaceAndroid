@@ -53,6 +53,6 @@ public interface Configurations
     int LABELS_IN_FEATURE_VECTOR = IMAGE_PIXEL_SIZE - (2 * SECTION_PIXEL_COLS * GRID_COLS) - (2 * SECTION_PIXEL_ROWS * GRID_ROWS) + 4;
     int BIG_INTS_IN_FEATURE_VECTOR = (int)Math.ceil(NEEDED_BINS / (double)INTS_PER_BIG_INT);
 
-    String IMG1 = "";
-    String IMG2 = "";
+    String[] origImages = new String[]{};
+    String[] testImages = new String[]{};
 }

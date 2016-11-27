@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<LinearLayout> layoutList;
 
     private Button addButton;
+    private Button batchButton;
 
     // These are offset values so btns and layouts have different IDs
     private final static int btnIDOffset = 1000;
@@ -49,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addButton = (Button)findViewById(R.id.btn_add);
         addButton.setOnClickListener(this);
 
+        batchButton = (Button)findViewById(R.id.btn_run_batch);
+        batchButton.setOnClickListener(this);
+
         getServices();
 
         paillier = null;
@@ -66,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_add:
                 Intent newServiceIntent = new Intent(this, SelectNewService.class);
                 startActivityForResult(newServiceIntent, IntentKeys.SELECT_NEW_SERVICE);
+                break;
+            case R.id.btn_run_batch:
+                Intent batchIntent = new Intent(this, RunBatch.class);
+                startActivity(batchIntent);
                 break;
             // Otherwise, authenticate a user on a specific web service
             default:
@@ -209,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             // Allow user to add new Service or authenticate with existing
             addButton.setEnabled(true);
+            batchButton.setEnabled(true);
             gotKey = true;
 
             for(Button btn : buttonList)
