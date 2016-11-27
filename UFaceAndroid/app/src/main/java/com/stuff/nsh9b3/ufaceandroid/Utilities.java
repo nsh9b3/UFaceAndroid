@@ -247,43 +247,4 @@ public class Utilities
 
         return sb.toString();
     }
-
-    /*public static int countByteFV(byte[][] byteFV)
-    {
-        int count = 0;
-
-        for(int i = 0; i < byteFV.length; i++)
-        {
-            int leftEmptyBits = Configurations.ZERO_BITS_PER_BIG_INT;
-            int bitsNeededPerInt = Configurations.BITS_NEEDED_PER_INT;
-            int next = 0;
-
-            for(int k = 0; k < byteFV[i].length; k++)
-            {
-                byte val = byteFV[i][k];
-
-                if(leftEmptyBits >= 8)
-                {
-                    leftEmptyBits -= 8;
-                    continue;
-                }
-                else
-                {
-                    if(bitsNeededPerInt >= 8)
-                    {
-                        int shiftL = bitsNeededPerInt + leftEmptyBits - 8;
-                        next = ((val << shiftL) & 0xFF) | next;
-                        bitsNeededPerInt -= (8 - leftEmptyBits);
-                        leftEmptyBits = 0;
-                    }
-                    else
-                    {
-
-                    }
-                }
-            }
-        }
-
-        return count;
-   }*/
 }

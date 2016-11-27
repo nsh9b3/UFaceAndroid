@@ -27,22 +27,7 @@ public class LBP
             featureVector[i] = generateRegionHistogram(pixels, i);
         }
 
-        /*
-        // Count the size... if needed
-        int labelCount = 0;
-        for(int i = 0; i < featureVector.length; i++)
-        {
-            int histCount = 0;
-            for(int k = 0; k < featureVector[i].length; k++)
-            {
-                histCount += featureVector[i][k];
-            }
-            labelCount += histCount;
-        }
-        Log.d("TAG", "count: " + labelCount);
-*/
-
-        return featureVector;//splitEncryptions(convertMatToArray(featureVector, Config.NUMBINS, Config.NUMSEC));
+        return featureVector;
     }
 
     private static int[] generateRegionHistogram(int[][] pixels, int region)
@@ -57,9 +42,7 @@ public class LBP
         {
             for(int k = startCol; k < endCol; k++)
             {
-                int label = getLabel(pixels, region, i, k);//,
-                        //((region % Configurations.SECTION_PIXEL_COLS > 0) && (k == startCol)), ((region % Configurations.SECTION_PIXEL_COLS < Configurations.SECTION_PIXEL_COLS - 1) && (k + 1 == endCol)),
-                        //((region / Configurations.SECTION_PIXEL_ROWS > 0) && (i == startRow)), ((region / Configurations.SECTION_PIXEL_ROWS < Configurations.SECTION_PIXEL_ROWS - 1) && (i + 1 == endRow)));
+                int label = getLabel(pixels, region, i, k);
 
                 // Place the value in the correct spot in the array based off the keys
                 // If the value is not uniform value, throw it into the last bin
