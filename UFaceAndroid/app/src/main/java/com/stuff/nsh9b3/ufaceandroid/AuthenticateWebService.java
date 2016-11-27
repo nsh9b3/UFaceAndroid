@@ -84,6 +84,10 @@ public class AuthenticateWebService extends AppCompatActivity implements OnAsync
                 {
                     Toast.makeText(getBaseContext(), "Awaiting Response!", Toast.LENGTH_LONG).show();
                 }
+                else
+                {
+                    Toast.makeText(getBaseContext(), "Couldn't Transmit Authentication Password!", Toast.LENGTH_LONG).show();
+                }
                 break;
         }
     }
