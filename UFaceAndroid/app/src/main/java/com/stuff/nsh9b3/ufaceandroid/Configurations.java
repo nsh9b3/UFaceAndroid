@@ -18,6 +18,7 @@ public interface Configurations
     String UFACE_SERVICE_LIST = "service_list";
     String UFACE_SERVICE_LIST_NAME = "Services";
     String SERVICE_ADD_USER = "add_user";
+    String SERVICE_ADD_USER_RESULT = "add_user_result_client";
     String SERVICE_USER_KEY = "User";
     String SERVICE_USER_INDEX_KEY = "Index";
     String SERVICE_SERVICE_KEY = "Service";

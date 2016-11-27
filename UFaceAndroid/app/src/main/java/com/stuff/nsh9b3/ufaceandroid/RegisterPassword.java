@@ -29,16 +29,16 @@ public class RegisterPassword extends AsyncTask
     int userIndex;
     String password;
     int size;
-    boolean successfullyTransmitted;
+    boolean result;
 
-    public RegisterPassword(OnAsyncTaskComplete listener, String serviceName, int userIndex, String password, int size, boolean successfullyTransmitted)
+    public RegisterPassword(OnAsyncTaskComplete listener, String serviceName, int userIndex, String password, int size)
     {
         this.listener = listener;
         this.serviceName = serviceName;
         this.userIndex = userIndex;
         this.password = password;
         this.size = size;
-        this.successfullyTransmitted = successfullyTransmitted;
+        this.result = false;
     }
 
     @Override
@@ -84,14 +84,7 @@ public class RegisterPassword extends AsyncTask
             String response = Utilities.convertStreamToString(is).replaceAll("\\\\", "");
             response = response.substring(1, response.length() - 2);
             JSONObject jResponse = new JSONObject(response);
-            if(jResponse.getBoolean("Result"))
-            {
-                successfullyTransmitted = true;
-            }
-            else
-            {
-                successfullyTransmitted = false;
-            }
+            result = jResponse.getBoolean("Result");
 
         } catch (MalformedURLException e)
         {
@@ -116,7 +109,8 @@ public class RegisterPassword extends AsyncTask
         JSONObject jObject = new JSONObject();
         try
         {
-            jObject.accumulate(AsyncTaskKeys.IS_VALID, successfullyTransmitted);
+            jObject.accumulate(AsyncTaskKeys.GET_TASK, AsyncTaskKeys.REG_PASS);
+            jObject.accumulate(AsyncTaskKeys.GET_RESULT, result);
         } catch (JSONException e)
         {
             e.printStackTrace();

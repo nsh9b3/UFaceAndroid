@@ -11,6 +11,7 @@ public interface IntentKeys
     String USER_NAME = "user_name";
     String USER_INDEX = "user_index";
     String REGISTRATION_PASS = "reg_pass";
+    String AUTHENTICATION_PASS = "auth_pass";
     int REQUEST_TAKE_PHOTO = 1;
     int REGISTER_NEW_SERVICE = 2;
     int SELECT_NEW_SERVICE = 3;

@@ -95,6 +95,11 @@ public class AuthenticateWebService extends AppCompatActivity implements OnAsync
                 if(result)
                 {
                     Toast.makeText(getBaseContext(), "Successfully authenticated!", Toast.LENGTH_LONG).show();
+
+                    Intent doneAuthentication = new Intent();
+                    doneAuthentication.putExtra(IntentKeys.AUTHENTICATION_PASS, result);
+                    setResult(Activity.RESULT_OK, doneAuthentication);
+                    finish();
                 }
                 else
                 {
@@ -114,6 +119,11 @@ public class AuthenticateWebService extends AppCompatActivity implements OnAsync
                     else
                     {
                         Toast.makeText(getBaseContext(), "Authentication failed!", Toast.LENGTH_LONG).show();
+
+                        Intent doneAuthentication = new Intent();
+                        doneAuthentication.putExtra(IntentKeys.AUTHENTICATION_PASS, result);
+                        setResult(Activity.RESULT_OK, doneAuthentication);
+                        finish();
                     }
                 }
                 break;

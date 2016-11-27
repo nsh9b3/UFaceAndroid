@@ -28,16 +28,16 @@ public class BeginRegistration extends AsyncTask
     String userID;
     String serviceName;
     int userIndex;
-    boolean validName;
+    boolean result;
 
-    public BeginRegistration(OnAsyncTaskComplete listener, String address, String userID, String serviceName, int userIndex, boolean validName)
+    public BeginRegistration(OnAsyncTaskComplete listener, String address, String userID, String serviceName, int userIndex)
     {
         this.listener = listener;
         this.address = address;
         this.userID = userID;
         this.serviceName = serviceName;
         this.userIndex = userIndex;
-        this.validName = validName;
+        this.result = false;
     }
     @Override
     protected Object doInBackground(Object[] objects)
@@ -78,15 +78,14 @@ public class BeginRegistration extends AsyncTask
             String response = Utilities.convertStreamToString(is).replaceAll("\\\\", "");
             response = response.substring(1, response.length() - 2);
             JSONObject jResponse = new JSONObject(response);
-            if(jResponse.getBoolean("Result"))
+            result = jResponse.getBoolean("Result");
+            if(result)
             {
-                validName = true;
                 userIndex = jResponse.getInt("Index");
             }
             else
             {
                 userIndex = -1;
-                validName = false;
             }
 
         } catch(MalformedURLException e)
@@ -112,7 +111,8 @@ public class BeginRegistration extends AsyncTask
 
         try
         {
-            jObject.accumulate(AsyncTaskKeys.IS_VALID, validName);
+            jObject.accumulate(AsyncTaskKeys.GET_TASK, AsyncTaskKeys.REG_USER);
+            jObject.accumulate(AsyncTaskKeys.GET_RESULT, result);
             jObject.accumulate(AsyncTaskKeys.USER_INDEX, userIndex);
         } catch (JSONException e)
         {

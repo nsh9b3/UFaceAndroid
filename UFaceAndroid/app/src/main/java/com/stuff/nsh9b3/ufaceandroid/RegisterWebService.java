@@ -35,10 +35,6 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
     private String userID;
     private int userIndex;
 
-    boolean checkName = false;
-    boolean validName = false;
-    boolean registerUser = false;
-    boolean registeredPass = false;
     String imagePath = "";
 
     @Override
@@ -109,15 +105,11 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
                     Toast.makeText(getBaseContext(), String.format("The name %s has already been verified as valid.", userID), Toast.LENGTH_LONG).show();
                 } else
                 {
-                    // Otherwise, check the name to see if it's valid
-                    checkName = true;
-
-                    BeginRegistration beginRegistration = new BeginRegistration(this, webServiceAddress, userID, webServiceName, userIndex, validName);
+                    BeginRegistration beginRegistration = new BeginRegistration(this, webServiceAddress, userID, webServiceName, userIndex);
                     beginRegistration.execute();
                 }
                 break;
             case R.id.btn_register_take_photo:
-                registerUser = true;
                 userIndex = userIDs.get(userID);
                 imagePath = Utilities.takePhoto(this);
                 break;
@@ -138,7 +130,7 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
                 int[][] splitFV = Utilities.splitFVForEncryption(intFV);
                 byte[][] byteFV = Utilities.createByteFV(splitFV);
                 String password = Utilities.encryptFV(byteFV);
-                RegisterPassword registerPassword = new RegisterPassword(this, webServiceName, userIndex, password, Configurations.LABELS_IN_FEATURE_VECTOR, registeredPass);
+                RegisterPassword registerPassword = new RegisterPassword(this, webServiceName, userIndex, password, Configurations.LABELS_IN_FEATURE_VECTOR);
                 registerPassword.execute();
             }
         }
@@ -149,65 +141,103 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
     public void onTaskCompleted(Object obj)
     {
         JSONObject jObject = (JSONObject) obj;
-        if(checkName)
+        String task = "";
+        boolean result = false;
+        try
         {
-            try
-            {
-                validName = jObject.getBoolean(AsyncTaskKeys.IS_VALID);
-                userIndex = jObject.getInt(AsyncTaskKeys.USER_INDEX);
-            } catch(JSONException e)
-            {
-                e.printStackTrace();
-            }
-
-            pbValidMark.setVisibility(View.GONE);
-            if(validName)
-            {
-                btnRegister.setEnabled(true);
-                userIDs.put(userID, userIndex);
-                ivValidMark.setVisibility(View.VISIBLE);
-                ivValidMark.setBackgroundResource(R.drawable.check);
-            }
-            else
-            {
-                userIDs.remove(userID);
-                ivValidMark.setVisibility(View.VISIBLE);
-                ivValidMark.setBackgroundResource(R.drawable.close);
-                Toast.makeText(getBaseContext(), String.format("The name %s is already in use.", userID), Toast.LENGTH_LONG).show();
-            }
-            checkName = false;
-            validName = false;
+            task = jObject.getString(AsyncTaskKeys.GET_TASK);
+            result = jObject.getBoolean(AsyncTaskKeys.GET_RESULT);
+        } catch(JSONException e)
+        {
+            e.printStackTrace();
         }
-        else if(registerUser)
+        switch(task)
         {
-            try
-            {
-                registeredPass = jObject.getBoolean(AsyncTaskKeys.IS_VALID);
-            } catch(JSONException e)
-            {
-                e.printStackTrace();
-            }
-            if(registeredPass)
-            {
-                Toast.makeText(getBaseContext(), "User has been successfully registered!", Toast.LENGTH_LONG).show();
-            }
-            else
-            {
-                Toast.makeText(getBaseContext(), "User failed at registering!", Toast.LENGTH_LONG).show();
-            }
+            case AsyncTaskKeys.REG_USER:
+                try
+                {
+                    userIndex = jObject.getInt(AsyncTaskKeys.USER_INDEX);
+                } catch(JSONException e)
+                {
+                    e.printStackTrace();
+                }
 
+                pbValidMark.setVisibility(View.GONE);
+                if(result)
+                {
+                    btnRegister.setEnabled(true);
+                    userIDs.put(userID, userIndex);
+                    ivValidMark.setVisibility(View.VISIBLE);
+                    ivValidMark.setBackgroundResource(R.drawable.check);
+                }
+                else
+                {
+                    userIDs.remove(userID);
+                    ivValidMark.setVisibility(View.VISIBLE);
+                    ivValidMark.setBackgroundResource(R.drawable.close);
 
-            Intent doneRegistering = new Intent();
-            doneRegistering.putExtra(IntentKeys.USER_NAME, userID);
-            doneRegistering.putExtra(IntentKeys.USER_INDEX, userIndex);
-            doneRegistering.putExtra(IntentKeys.SERVICE_NAME, webServiceName);
-            doneRegistering.putExtra(IntentKeys.SERVICE_ADDRESS, webServiceAddress);
-            doneRegistering.putExtra(IntentKeys.REGISTRATION_PASS, registeredPass);
-            setResult(Activity.RESULT_OK, doneRegistering);
-            finish();
+                    Toast.makeText(getBaseContext(), String.format("The name %s is already in use.", userID), Toast.LENGTH_LONG).show();
+                }
 
-            registeredPass = false;
-            registerUser = false;
+                break;
+
+            case AsyncTaskKeys.REG_PASS:
+                if(result)
+                {
+                    Toast.makeText(getBaseContext(), "Awaiting response!", Toast.LENGTH_LONG).show();
+
+                    AwaitRegistrationResult awaitRegistrationResult = new AwaitRegistrationResult(this, webServiceAddress, userID);
+                    awaitRegistrationResult.execute();
+                }
+                else
+                {
+                    Toast.makeText(getBaseContext(), "Couldn't transmit registration password!", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case AsyncTaskKeys.AWAIT_REG_RESULT:
+                if(result)
+                {
+                    Toast.makeText(getBaseContext(), "Successfully registered!", Toast.LENGTH_LONG).show();
+
+                    Intent doneRegistering = new Intent();
+                    doneRegistering.putExtra(IntentKeys.USER_NAME, userID);
+                    doneRegistering.putExtra(IntentKeys.USER_INDEX, userIndex);
+                    doneRegistering.putExtra(IntentKeys.SERVICE_NAME, webServiceName);
+                    doneRegistering.putExtra(IntentKeys.SERVICE_ADDRESS, webServiceAddress);
+                    doneRegistering.putExtra(IntentKeys.REGISTRATION_PASS, result);
+                    setResult(Activity.RESULT_OK, doneRegistering);
+                    finish();
+                }
+                else
+                {
+                    boolean checkAgain = false;
+                    try
+                    {
+                        checkAgain = jObject.getBoolean(AsyncTaskKeys.CHECK_AGAIN);
+                    } catch(JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    if(checkAgain)
+                    {
+                        AwaitRegistrationResult awaitRegistrationResult = new AwaitRegistrationResult(this, webServiceAddress, userID);
+                        awaitRegistrationResult.execute();
+                    }
+                    else
+                    {
+                        Toast.makeText(getBaseContext(), "Registration failed!", Toast.LENGTH_LONG).show();
+
+                        Intent doneRegistering = new Intent();
+                        doneRegistering.putExtra(IntentKeys.USER_NAME, userID);
+                        doneRegistering.putExtra(IntentKeys.USER_INDEX, userIndex);
+                        doneRegistering.putExtra(IntentKeys.SERVICE_NAME, webServiceName);
+                        doneRegistering.putExtra(IntentKeys.SERVICE_ADDRESS, webServiceAddress);
+                        doneRegistering.putExtra(IntentKeys.REGISTRATION_PASS, result);
+                        setResult(Activity.RESULT_OK, doneRegistering);
+                        finish();
+                    }
+                }
+                break;
         }
     }
 
