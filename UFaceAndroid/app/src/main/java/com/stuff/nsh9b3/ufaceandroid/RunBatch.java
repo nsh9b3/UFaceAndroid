@@ -1,9 +1,12 @@
 package com.stuff.nsh9b3.ufaceandroid;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -109,11 +112,31 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
                     BeginAuthentication beginAuthentication = new BeginAuthentication(this, service);
                     beginAuthentication.execute();
                 }
+                else
+                {
+                    boolean checkAgain = false;
+                    try
+                    {
+                        checkAgain = jObject.getBoolean(AsyncTaskKeys.CHECK_AGAIN);
+                    } catch(JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    if(checkAgain)
+                    {
+                        AwaitRegistrationResult awaitRegistrationResult = new AwaitRegistrationResult(this, serviceAddress, userName);
+                        awaitRegistrationResult.execute();
+                    }
+                    else
+                    {
+                        // FAIL
+                    }
+                }
                 break;
             case AsyncTaskKeys.AUTH_USER:
                 if(result)
                 {
-
                     testPassword = generatePassword(Configurations.testImages[testIndex++]);
 
                     AuthenticatePassword authenticatePassword = new AuthenticatePassword(this, service, testPassword);
@@ -128,24 +151,66 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
                 }
                 break;
             case AsyncTaskKeys.AWAIT_AUTH_RESULT:
-                if(testIndex == endTextIndex)
+                if(result)
                 {
-                    testIndex = 0;
-                    if(origIndex == endOrigIndex)
+                    if(testIndex == endTextIndex)
                     {
-                        // DONE
+                        testIndex = 0;
+                        if(origIndex == endOrigIndex)
+                        {
+                            // DONE
+                        }
+                        else
+                        {
+                            // New start image
+                            startRegistering();
+                        }
                     }
                     else
                     {
-                        // New start image
-                        startRegistering();
+                        tvCount.setText(count++);
+                        // New test image
+                        startAuthenticating();
                     }
                 }
                 else
                 {
-                    tvCount.setText(count++);
-                    // New test image
-                    startAuthenticating();
+                    boolean checkAgain = false;
+                    try
+                    {
+                        checkAgain = jObject.getBoolean(AsyncTaskKeys.CHECK_AGAIN);
+                    } catch(JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    if(checkAgain)
+                    {
+                        AwaitAuthenticationResult awaitAuthenticationResult = new AwaitAuthenticationResult(this, service);
+                        awaitAuthenticationResult.execute();
+                    }
+                    else
+                    {
+                        if(testIndex == endTextIndex)
+                        {
+                            testIndex = 0;
+                            if(origIndex == endOrigIndex)
+                            {
+                                // DONE
+                            }
+                            else
+                            {
+                                // New start image
+                                startRegistering();
+                            }
+                        }
+                        else
+                        {
+                            tvCount.setText(count++);
+                            // New test image
+                            startAuthenticating();
+                        }
+                    }
                 }
                 break;
         }
