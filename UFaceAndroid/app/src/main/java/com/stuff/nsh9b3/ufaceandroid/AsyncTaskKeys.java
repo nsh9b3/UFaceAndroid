@@ -8,4 +8,8 @@ public interface AsyncTaskKeys
 {
     String IS_VALID = "is_valid";
     String USER_INDEX = "user_index";
+    String GET_TASK = "get_task";
+    String GET_RESULT = "get_result";
+    String AUTH_USER = "auth_user";
+    String AUTH_PASS = "auth_pass";
 }

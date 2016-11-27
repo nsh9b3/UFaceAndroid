@@ -14,4 +14,5 @@ public interface IntentKeys
     int REQUEST_TAKE_PHOTO = 1;
     int REGISTER_NEW_SERVICE = 2;
     int SELECT_NEW_SERVICE = 3;
+    int AUTH_SERVICE = 4;
 }

@@ -69,6 +69,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             // Otherwise, authenticate a user on a specific web service
             default:
+                WebService selectedService = null;
+                Button selectedButton = (Button)view;
+                for(WebService service : serviceList)
+                {
+                    if(service.serviceName.compareTo(selectedButton.getText().toString()) == 0)
+                    {
+                        selectedService = service;
+                        break;
+                    }
+                }
+                Intent authServiceIntent = new Intent(this, AuthenticateWebService.class);
+                authServiceIntent.putExtra(IntentKeys.SERVICE_NAME, selectedService.serviceName);
+                authServiceIntent.putExtra(IntentKeys.SERVICE_ADDRESS, selectedService.serviceAddress);
+                authServiceIntent.putExtra(IntentKeys.USER_NAME, selectedService.userName);
+                authServiceIntent.putExtra(IntentKeys.USER_INDEX, selectedService.userIndex);
+                startActivityForResult(authServiceIntent, IntentKeys.AUTH_SERVICE);
                 break;
         }
     }

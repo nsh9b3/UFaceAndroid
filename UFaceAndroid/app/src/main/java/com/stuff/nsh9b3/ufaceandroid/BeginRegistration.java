@@ -21,7 +21,7 @@ import java.net.URL;
  * Created by nick on 11/21/16.
  */
 
-public class CheckValidName extends AsyncTask
+public class BeginRegistration extends AsyncTask
 {
     OnAsyncTaskComplete listener;
     String address;
@@ -30,7 +30,7 @@ public class CheckValidName extends AsyncTask
     int userIndex;
     boolean validName;
 
-    public CheckValidName(OnAsyncTaskComplete listener, String address, String userID, String serviceName, int userIndex, boolean validName)
+    public BeginRegistration(OnAsyncTaskComplete listener, String address, String userID, String serviceName, int userIndex, boolean validName)
     {
         this.listener = listener;
         this.address = address;

@@ -18,8 +18,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -114,8 +112,8 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
                     // Otherwise, check the name to see if it's valid
                     checkName = true;
 
-                    CheckValidName checkValidName = new CheckValidName(this, webServiceAddress, userID, webServiceName, userIndex, validName);
-                    checkValidName.execute();
+                    BeginRegistration beginRegistration = new BeginRegistration(this, webServiceAddress, userID, webServiceName, userIndex, validName);
+                    beginRegistration.execute();
                 }
                 break;
             case R.id.btn_register_take_photo:
@@ -139,7 +137,7 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
                 int[][] intFV = LBP.generateFeatureVector(splitImage);
                 int[][] splitFV = Utilities.splitFVForEncryption(intFV);
                 byte[][] byteFV = Utilities.createByteFV(splitFV);
-                String password = encryptFV(byteFV);
+                String password = Utilities.encryptFV(byteFV);
                 RegisterPassword registerPassword = new RegisterPassword(this, webServiceName, userIndex, password, Configurations.LABELS_IN_FEATURE_VECTOR, registeredPass);
                 registerPassword.execute();
             }
@@ -211,25 +209,6 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
             registeredPass = false;
             registerUser = false;
         }
-    }
-
-    private String encryptFV(byte[][] byteFV)
-    {
-        BigInteger[] encryptedFV = new BigInteger[Configurations.BIG_INTS_IN_FEATURE_VECTOR];
-
-        for(int i = 0; i < Configurations.BIG_INTS_IN_FEATURE_VECTOR; i++)
-        {
-            BigInteger bigInt = new BigInteger(byteFV[i]);
-            encryptedFV[i] = MainActivity.paillier.Encryption(bigInt);
-        }
-
-        final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < encryptedFV.length; i++)
-        {
-            sb.append(encryptedFV[i]).append(" ");
-        }
-
-        return sb.toString();
     }
 
 }

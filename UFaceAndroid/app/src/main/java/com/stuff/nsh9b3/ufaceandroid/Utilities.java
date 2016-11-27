@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -226,6 +227,25 @@ public class Utilities
         }
 
         return byteFV;
+    }
+
+    public static String encryptFV(byte[][] byteFV)
+    {
+        BigInteger[] encryptedFV = new BigInteger[Configurations.BIG_INTS_IN_FEATURE_VECTOR];
+
+        for(int i = 0; i < Configurations.BIG_INTS_IN_FEATURE_VECTOR; i++)
+        {
+            BigInteger bigInt = new BigInteger(byteFV[i]);
+            encryptedFV[i] = MainActivity.paillier.Encryption(bigInt);
+        }
+
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < encryptedFV.length; i++)
+        {
+            sb.append(encryptedFV[i]).append(" ");
+        }
+
+        return sb.toString();
     }
 
     /*public static int countByteFV(byte[][] byteFV)
