@@ -3,6 +3,7 @@ package com.stuff.nsh9b3.ufaceandroid;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -128,7 +129,10 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
             {
                 Bitmap image = Utilities.resizeImage(imagePath);
                 File file = new File(imagePath);
-                file.delete();
+                if(file.exists())
+                    file.delete();
+                else
+                    image = null;
                 int[][] splitImage = Utilities.splitImageIntoSections(image);
                 int[][] intFV = LBP.generateFeatureVector(splitImage);
                 int[][] splitFV = Utilities.splitFVForEncryption(intFV);

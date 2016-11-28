@@ -249,6 +249,4 @@ public class Utilities
 
         return sb.toString();
     }
-
-
 }

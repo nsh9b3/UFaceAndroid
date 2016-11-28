@@ -3,6 +3,7 @@ package com.stuff.nsh9b3.ufaceandroid;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -11,13 +12,16 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.Random;
+
 public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
 {
     TextView tvOrigImage;
     TextView tvTestImage;
     TextView tvCount;
 
-    int count = 0;
+    int count = 1;
     int origIndex = 0;
     int testIndex = 0;
     int endOrigIndex = Configurations.origImages.length;
@@ -37,12 +41,11 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run_batch);
 
-        tvOrigImage = (TextView)findViewById(R.id.tv_test_image);
-        tvTestImage = (TextView)findViewById(R.id.tv_orig_image);
+        //tvOrigImage = (TextView)findViewById(R.id.tv_test_image);
+        //tvTestImage = (TextView)findViewById(R.id.tv_orig_image);
         tvCount = (TextView)findViewById(R.id.tv_count);
-        tvOrigImage.setText(Configurations.origImages[origIndex]);
-        tvTestImage.setText(Configurations.testImages[testIndex]);
-        tvCount.setText(count++);
+        //tvOrigImage.setText(Configurations.origImages[origIndex]);
+        //tvTestImage.setText(Configurations.testImages[testIndex]);
 
         startRegistering();
     }
@@ -50,22 +53,23 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
     private void startRegistering()
     {
         serviceName = "Bank";
-        serviceAddress = "http://192.168.1.232:3001/";
+        serviceAddress = "http://192.168.0.12:3001/";
         userIndex = -1;
-        userName = "user_" + origIndex;
-        origPassword = generatePassword(Configurations.origImages[origIndex++]);
-        tvCount.setText(count++);
+        Random rand = new Random();
+        userName = "user_" + rand.nextInt() + "_" + origIndex;
+        origPassword = generatePassword(Configurations.origImages[origIndex]);
+        tvCount.setText("Count: " + count++);
 
-        BeginRegistration beginRegistration = new BeginRegistration(this, serviceAddress, serviceName, userName, userIndex);
+        BeginRegistration beginRegistration = new BeginRegistration(this, serviceAddress, userName, serviceName, userIndex);
         beginRegistration.execute();
     }
 
     private void startAuthenticating()
     {
-        testPassword = generatePassword(Configurations.testImages[testIndex++]);
+        testPassword = generatePassword(Configurations.testImages[testIndex]);
 
-        AuthenticatePassword authenticatePassword = new AuthenticatePassword(this, service, testPassword);
-        authenticatePassword.execute();
+        BeginAuthentication beginAuthentication = new BeginAuthentication(this, service);
+        beginAuthentication.execute();
     }
 
     @Override
@@ -137,7 +141,7 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
             case AsyncTaskKeys.AUTH_USER:
                 if(result)
                 {
-                    testPassword = generatePassword(Configurations.testImages[testIndex++]);
+                    testPassword = generatePassword(Configurations.testImages[testIndex]);
 
                     AuthenticatePassword authenticatePassword = new AuthenticatePassword(this, service, testPassword);
                     authenticatePassword.execute();
@@ -153,12 +157,15 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
             case AsyncTaskKeys.AWAIT_AUTH_RESULT:
                 if(result)
                 {
+                    testIndex++;
                     if(testIndex == endTextIndex)
                     {
                         testIndex = 0;
+                        origIndex++;
                         if(origIndex == endOrigIndex)
                         {
                             // DONE
+                            tvCount.setText("Done");
                         }
                         else
                         {
@@ -191,12 +198,15 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
                     }
                     else
                     {
+                        testIndex++;
                         if(testIndex == endTextIndex)
                         {
                             testIndex = 0;
+                            origIndex++;
                             if(origIndex == endOrigIndex)
                             {
                                 // DONE
+                                tvCount.setText("Done");
                             }
                             else
                             {
@@ -206,7 +216,7 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
                         }
                         else
                         {
-                            tvCount.setText(count++);
+                            tvCount.setText("Count: " + count++);
                             // New test image
                             startAuthenticating();
                         }
@@ -218,11 +228,17 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
 
     private String generatePassword(String imagePath)
     {
-        Bitmap image = Utilities.resizeImage(imagePath);
-        int[][] splitImage = Utilities.splitImageIntoSections(image);
-        int[][] intFV = LBP.generateFeatureVector(splitImage);
-        int[][] splitFV = Utilities.splitFVForEncryption(intFV);
-        byte[][] byteFV = Utilities.createByteFV(splitFV);
-        return Utilities.encryptFV(byteFV);
+        File file = new File(imagePath);
+        String password = null;
+        if(file.exists())
+        {
+            Bitmap image = Utilities.resizeImage(imagePath);
+            int[][] splitImage = Utilities.splitImageIntoSections(image);
+            int[][] intFV = LBP.generateFeatureVector(splitImage);
+            int[][] splitFV = Utilities.splitFVForEncryption(intFV);
+            byte[][] byteFV = Utilities.createByteFV(splitFV);
+            password =  Utilities.encryptFV(byteFV);
+        }
+        return password;
     }
 }

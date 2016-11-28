@@ -2,6 +2,7 @@ package com.stuff.nsh9b3.ufaceandroid;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -139,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         layoutList = new ArrayList<>();
         serviceList = new ArrayList<>();
 
+        /*
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Set<String> servList = sharedPref.getStringSet(SharedPrefKeys.SERVICE_LIST, new HashSet<String>());
 
@@ -156,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Create an icon on the home screen
             makeNewServiceIcon(webService.serviceName);
         }
+        */
     }
 
     private void makeNewServiceIcon(String serviceName)
