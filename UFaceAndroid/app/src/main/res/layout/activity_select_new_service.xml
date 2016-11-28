@@ -13,7 +13,7 @@
     <TextView
         android:id="@+id/textView_select_registered_service"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:text="SELECTSERVICE"
+        android:text="UFace Services"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -44,7 +44,6 @@
 
             <TextView
                 android:id="@+id/tv_selectedService"
-                android:hint="HINT"
                 android:gravity="center_horizontal|center_vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -54,7 +53,7 @@
 
             <Button
                 android:id="@+id/btn_saveSelection"
-                android:text="SAVESELECTION"
+                android:text="Select Service"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
