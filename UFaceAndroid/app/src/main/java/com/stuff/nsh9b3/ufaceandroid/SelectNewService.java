@@ -120,4 +120,5 @@ public class SelectNewService extends AppCompatActivity implements OnAsyncTaskCo
             }
         }
     }
+
 }
