@@ -123,10 +123,12 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+        long[] time = new long[5];
         if(requestCode == IntentKeys.REQUEST_TAKE_PHOTO)
         {
             if(resultCode == RESULT_OK)
             {
+                time[0] = System.currentTimeMillis();
                 Bitmap image = Utilities.resizeImage(imagePath);
                 File file = new File(imagePath);
                 if(file.exists())
@@ -134,10 +136,14 @@ public class RegisterWebService extends AppCompatActivity implements TextWatcher
                 else
                     image = null;
                 int[][] splitImage = Utilities.splitImageIntoSections(image);
+                time[1] = System.currentTimeMillis();
                 int[][] intFV = LBP.generateFeatureVector(splitImage);
+                time[2] = System.currentTimeMillis();
                 int[][] splitFV = Utilities.splitFVForEncryption(intFV);
                 byte[][] byteFV = Utilities.createByteFV(splitFV);
+                time[3] = System.currentTimeMillis();
                 String password = Utilities.encryptFV(byteFV);
+                time[4] = System.currentTimeMillis();
                 RegisterPassword registerPassword = new RegisterPassword(this, webServiceName, userIndex, password, Configurations.LABELS_IN_FEATURE_VECTOR);
                 registerPassword.execute();
             }

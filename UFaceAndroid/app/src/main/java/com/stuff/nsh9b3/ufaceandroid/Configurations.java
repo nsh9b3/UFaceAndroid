@@ -28,6 +28,7 @@ public interface Configurations
     String UFACE_AUTHENTICATE_USER = "authenticate_user";
     String UFACE_AUTHENTICATE_PASSWORD = "authenticate_password";
     String UFACE_AUTHENTICATION_RESULT = "authentication_result_client";
+    String TIME_KEY = "Time";
 
     int GRID_ROWS = 4;
     int GRID_COLS = GRID_ROWS;
@@ -54,15 +55,15 @@ public interface Configurations
     int BIG_INTS_IN_FEATURE_VECTOR = (int)Math.ceil(NEEDED_BINS / (double)INTS_PER_BIG_INT);
 
     String[] origImages = new String[]{
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-Close-1.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-Close-1.jpg"
+            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-c-1.jpg",
+            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-c-1.jpg"
     };
     String[] testImages = new String[]{
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-Close-2.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-Zoom-1.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-Zoom-2.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-Close-2.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-Zoom-1.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-Zoom-2.jpg"
+            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-c-2.jpg",
+            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-z-1.jpg",
+            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-z-2.jpg",
+            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-c-2.jpg",
+            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-z-1.jpg",
+            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-z-2.jpg"
     };
 }

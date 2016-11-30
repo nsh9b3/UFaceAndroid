@@ -1,11 +1,15 @@
 package com.stuff.nsh9b3.ufaceandroid;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,14 +17,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Random;
 
 public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
 {
-    TextView tvOrigImage;
-    TextView tvTestImage;
-    TextView tvCount;
-
     int count = 1;
     int origIndex = 0;
     int testIndex = 0;
@@ -34,6 +39,12 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
     int userIndex;
     String origPassword;
     String testPassword;
+    File timeSheet;
+    long[] time = new long[5];
+
+    TextView tvOrigImage;
+    TextView tvTestImage;
+    TextView tvCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,24 +52,51 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run_batch);
 
-        //tvOrigImage = (TextView)findViewById(R.id.tv_test_image);
-        //tvTestImage = (TextView)findViewById(R.id.tv_orig_image);
-        tvCount = (TextView)findViewById(R.id.tv_count);
-        //tvOrigImage.setText(Configurations.origImages[origIndex]);
-        //tvTestImage.setText(Configurations.testImages[testIndex]);
+        tvOrigImage = (TextView)findViewById(R.id.tv_orig_image);
+        tvTestImage = (TextView)findViewById(R.id.tv_test_image);
+        tvCount = (TextView)findViewById(R.id.tv_count_number);
+
+        try
+        {
+            timeSheet = Utilities.createTimeSheet(this);
+
+            FileWriter fWriter;
+            fWriter = new FileWriter(timeSheet, true);
+            fWriter.write("Starting Tests!\n");
+            fWriter.flush();
+            fWriter.close();
+        } catch(IOException e)
+        {
+            e.printStackTrace();
+        }
 
         startRegistering();
     }
 
     private void startRegistering()
     {
+        Log.d("BATCH", "startRegistering");
         serviceName = "Bank";
         serviceAddress = "http://192.168.0.12:3001/";
         userIndex = -1;
-        Random rand = new Random();
-        userName = "user_" + rand.nextInt() + "_" + origIndex;
         origPassword = generatePassword(Configurations.origImages[origIndex]);
+        userName = Configurations.origImages[origIndex].split("/")[Configurations.origImages[origIndex].split("/").length - 1];
+        tvOrigImage.setText(userName);
         tvCount.setText("Count: " + count++);
+
+        try
+        {
+            FileWriter fWriter;
+            fWriter = new FileWriter(timeSheet, true);
+            fWriter.write("User: " + userName + "\n");
+            fWriter.flush();
+            fWriter.close();
+        } catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        printTime();
 
         BeginRegistration beginRegistration = new BeginRegistration(this, serviceAddress, userName, serviceName, userIndex);
         beginRegistration.execute();
@@ -66,7 +104,22 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
 
     private void startAuthenticating()
     {
+        Log.d("BATCH", "startAuthenticating");
         testPassword = generatePassword(Configurations.testImages[testIndex]);
+        String testName = Configurations.testImages[testIndex].split("/")[Configurations.testImages[testIndex].split("/").length - 1];
+        tvTestImage.setText(testName);
+
+        try
+        {
+            FileWriter fWriter;
+            fWriter = new FileWriter(timeSheet, true);
+            fWriter.write("Test: " + testName + "\n");
+            fWriter.flush();
+            fWriter.close();
+        } catch(IOException e)
+        {
+            e.printStackTrace();
+        }
 
         BeginAuthentication beginAuthentication = new BeginAuthentication(this, service);
         beginAuthentication.execute();
@@ -232,13 +285,39 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
         String password = null;
         if(file.exists())
         {
+            time[0] = System.currentTimeMillis();
             Bitmap image = Utilities.resizeImage(imagePath);
             int[][] splitImage = Utilities.splitImageIntoSections(image);
+            time[1] = System.currentTimeMillis();
             int[][] intFV = LBP.generateFeatureVector(splitImage);
+            time[2] = System.currentTimeMillis();
             int[][] splitFV = Utilities.splitFVForEncryption(intFV);
             byte[][] byteFV = Utilities.createByteFV(splitFV);
+            time[3] = System.currentTimeMillis();
             password =  Utilities.encryptFV(byteFV);
+            time[4] = System.currentTimeMillis();
         }
         return password;
+    }
+
+    private void printTime()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\tResize-Split: \t").append(time[1] - time[0])
+                .append("\tLBP: \t").append(time[2] - time[1])
+                .append("\tDataManip: \t").append(time[3] - time[2])
+                .append("\tEncrypt: \t").append(time[4] - time[3])
+                .append("\tTotal: \t").append(time[4] - time[0]).append("\n");
+        try
+        {
+            FileWriter fWriter;
+            fWriter = new FileWriter(timeSheet, true);
+            fWriter.write(sb.toString());
+            fWriter.flush();
+            fWriter.close();
+        } catch(IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

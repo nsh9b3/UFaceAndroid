@@ -12,10 +12,28 @@
     tools:context="com.stuff.nsh9b3.ufaceandroid.RunBatch">
 
     <TextView
-        android:id="@+id/tv_count"
-        android:hint="Count"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        android:id="@+id/tv_orig_image"
+        android:hint="Orig"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/tv_test_image"
+        android:hint="Test"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_orig_image"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/tv_count_number"
+        android:hint="Count"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_test_image"
         android:layout_centerHorizontal="true"/>
 </RelativeLayout>
