@@ -77,18 +77,20 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
     {
         Log.d("BATCH", "startRegistering");
         serviceName = "Bank";
-        serviceAddress = "http://192.168.0.12:3001/";
+        serviceAddress = "http://" + Configurations.UFACE_BANK_ADDRESS + "/";
         userIndex = -1;
         origPassword = generatePassword(Configurations.origImages[origIndex]);
         userName = Configurations.origImages[origIndex].split("/")[Configurations.origImages[origIndex].split("/").length - 1];
         tvOrigImage.setText(userName);
+        Random rand = new Random();
+        userName = userName + "-" + rand.nextInt();
         tvCount.setText("Count: " + count++);
 
         try
         {
             FileWriter fWriter;
             fWriter = new FileWriter(timeSheet, true);
-            fWriter.write("User: " + userName + "\n");
+            fWriter.write("\n\n------------------------------------------------------------------------------------\nUser: " + userName + "\n");
             fWriter.flush();
             fWriter.close();
         } catch(IOException e)
@@ -120,6 +122,8 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
         {
             e.printStackTrace();
         }
+
+        printTime();
 
         BeginAuthentication beginAuthentication = new BeginAuthentication(this, service);
         beginAuthentication.execute();
@@ -166,8 +170,7 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
             case AsyncTaskKeys.AWAIT_REG_RESULT:
                 if(result)
                 {
-                    BeginAuthentication beginAuthentication = new BeginAuthentication(this, service);
-                    beginAuthentication.execute();
+                    startAuthenticating();
                 }
                 else
                 {
@@ -188,6 +191,7 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
                     else
                     {
                         // FAIL
+                        tvCount.setText("Failed on " + tvCount);
                     }
                 }
                 break;
@@ -228,7 +232,7 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
                     }
                     else
                     {
-                        tvCount.setText(count++);
+                        tvCount.setText("Count: " + count++);
                         // New test image
                         startAuthenticating();
                     }

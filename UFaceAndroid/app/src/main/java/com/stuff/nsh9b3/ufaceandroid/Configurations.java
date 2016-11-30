@@ -11,6 +11,7 @@ public interface Configurations
     boolean USE_EXTRA_SPACE_IN_BIG_INTS = false;
 
     String UFACE_DATA_ADDRESS = "131.151.8.33:3000";
+    String UFACE_BANK_ADDRESS = "131.151.8.33:3001";
     String UFACE_KEY_ADDRESS = "131.151.8.33:3002";
 
     String UFACE_PUBLIC_KEY = "public_key";
@@ -54,16 +55,17 @@ public interface Configurations
     int LABELS_IN_FEATURE_VECTOR = IMAGE_PIXEL_SIZE - (2 * SECTION_PIXEL_COLS * GRID_COLS) - (2 * SECTION_PIXEL_ROWS * GRID_ROWS) + 4;
     int BIG_INTS_IN_FEATURE_VECTOR = (int)Math.ceil(NEEDED_BINS / (double)INTS_PER_BIG_INT);
 
+    String path = "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/";
     String[] origImages = new String[]{
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-c-1.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-c-1.jpg"
+            path + "Nick-c-1.jpg",
+            path + "Sahi-c-1.jpg"
     };
     String[] testImages = new String[]{
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-c-2.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-z-1.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Nick-z-2.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-c-2.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-z-1.jpg",
-            "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/Sahi-z-2.jpg"
+            path + "Nick-c-2.jpg",
+            path + "Nick-z-1.jpg",
+            path + "Nick-z-2.jpg",
+            path + "Sahi-c-2.jpg",
+            path + "Sahi-z-1.jpg",
+            path + "Sahi-z-2.jpg"
     };
 }
