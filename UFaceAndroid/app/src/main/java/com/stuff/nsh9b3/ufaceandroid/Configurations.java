@@ -10,9 +10,9 @@ public interface Configurations
 
     boolean USE_EXTRA_SPACE_IN_BIG_INTS = false;
 
-    String UFACE_DATA_ADDRESS = "131.151.8.33:3000";
-    String UFACE_BANK_ADDRESS = "131.151.8.33:3001";
-    String UFACE_KEY_ADDRESS = "131.151.8.33:3002";
+    String UFACE_DATA_ADDRESS = "10.106.50.72:3000";
+    String UFACE_BANK_ADDRESS = "10.106.50.72:3001";
+    String UFACE_KEY_ADDRESS = "10.106.50.72:3002";
 
     String UFACE_PUBLIC_KEY = "public_key";
     String UFACE_PUBLIC_KEY_NAME = "Public";
@@ -57,15 +57,76 @@ public interface Configurations
 
     String path = "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/";
     String[] origImages = new String[]{
-            path + "Nick-c-1.jpg",
-            path + "Sahi-c-1.jpg"
+            path + "Abira-c-1.jpeg",
+            //path + "Adam-c-1.jpg",
+            //path + "Ande-c-1.jpeg",
+            //path + "Atoosa-c-1.jpg",
+            //path + "Ben-c-1.jpg",
+            //path + "Devin-c-1.jpg",
+            //path + "Doug-c-1.jpg",
+            //path + "Dude-c-1.jpg",
+            //path + "Hug-c-1.jpg",
+            //path + "Jess-c-1.jpg",
+            //path + "Jiang-c-1.jpg",
+            //path + "Joe-c-1.jpg",
+            //path + "Kat-c-1.jpg",
+            //path + "Kyle-c-1.jpg",
+            //path + "Luke-c-1.jpg",
+            //path + "Mel-c-1.jpg",
+            //path + "Mike-c-1.jpg",
+            //path + "Nick-c-1.jpg",
+            //path + "Rand-c-1.jpg",
+            //path + "Sahi-c-1.jpg",
+            //path + "Sam-c-1.jpg",
+            //path + "Scott-c-1.jpg",
+            //path + "Snehi-c-1.jpg"
     };
     String[] testImages = new String[]{
+            path + "Abira-c-2.jpeg",
+            path + "Abira-z-1.jpeg",
+            path + "Adam-c-2.jpg",
+            path + "Adam-z-1.jpg",
+            path + "Ande-c-2.jpeg",
+            path + "Ande-z-1.jpeg",
+            path + "Atoosa-c-2.jpg",
+            path + "Atoosa-z-1.jpg",
+            path + "Ben-c-2.jpg",
+            path + "Ben-z-1.jpg",
+            path + "Devin-c-2.jpg",
+            path + "Devin-z-1.jpg",
+            path + "Doug-c-2.jpg",
+            path + "Doug-z-1.jpg",
+            path + "Dude-c-2.jpg",
+            path + "Dude-z-1.jpg",
+            path + "Hug-c-2.jpg",
+            path + "Hug-z-1.jpg",
+            path + "Jess-c-2.jpg",
+            path + "Jess-z-1.jpg",
+            path + "Jiang-c-2.jpg",
+            path + "Jiang-z-1.jpg",
+            path + "Joe-c-2.jpg",
+            path + "Joe-z-1.jpg",
+            path + "Kat-c-2.jpg",
+            path + "Kat-z-1.jpg",
+            path + "Kyle-c-2.jpg",
+            path + "Kyle-z-1.jpg",
+            path + "Luke-c-2.jpg",
+            path + "Luke-z-1.jpg",
+            path + "Mel-c-2.jpg",
+            path + "Mel-z-1.jpg",
+            path + "Mike-c-2.jpg",
+            path + "Mike-z-1.jpg",
             path + "Nick-c-2.jpg",
             path + "Nick-z-1.jpg",
-            path + "Nick-z-2.jpg",
+            path + "Rand-c-2.jpg",
+            path + "Rand-z-1.jpg",
             path + "Sahi-c-2.jpg",
             path + "Sahi-z-1.jpg",
-            path + "Sahi-z-2.jpg"
+            path + "Sam-c-2.jpg",
+            path + "Sam-z-1.jpg",
+            path + "Scott-c-2.jpg",
+            path + "Scott-z-1.jpg",
+            path + "Snehi-c-2.jpg",
+            path + "Snehi-z-1.jpg"
     };
 }

@@ -56,21 +56,24 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
         tvTestImage = (TextView)findViewById(R.id.tv_test_image);
         tvCount = (TextView)findViewById(R.id.tv_count_number);
 
-        try
+        if(checkFiles())
         {
-            timeSheet = Utilities.createTimeSheet(this);
+            try
+            {
+                timeSheet = Utilities.createTimeSheet(this);
 
-            FileWriter fWriter;
-            fWriter = new FileWriter(timeSheet, true);
-            fWriter.write("Starting Tests!\n");
-            fWriter.flush();
-            fWriter.close();
-        } catch(IOException e)
-        {
-            e.printStackTrace();
+                FileWriter fWriter;
+                fWriter = new FileWriter(timeSheet, true);
+                fWriter.write("Starting Tests!\n");
+                fWriter.flush();
+                fWriter.close();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            startRegistering();
         }
-
-        startRegistering();
     }
 
     private void startRegistering()
@@ -82,8 +85,8 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
         origPassword = generatePassword(Configurations.origImages[origIndex]);
         userName = Configurations.origImages[origIndex].split("/")[Configurations.origImages[origIndex].split("/").length - 1];
         tvOrigImage.setText(userName);
-        Random rand = new Random();
-        userName = userName + "-" + rand.nextInt();
+        /*Random rand = new Random();
+        userName = userName + "-" + rand.nextInt();*/
         tvCount.setText("Count: " + count++);
 
         try
@@ -323,5 +326,34 @@ public class RunBatch extends AppCompatActivity implements OnAsyncTaskComplete
         {
             e.printStackTrace();
         }
+    }
+
+    public boolean checkFiles()
+    {
+        boolean isGood = true;
+        for(String path : Configurations.origImages)
+        {
+            File file = new File(path);
+            if(!file.exists())
+            {
+                Toast.makeText(this, path + " doesn't exists - in origImages!", Toast.LENGTH_LONG).show();
+                isGood = false;
+                break;
+            }
+        }
+        if(isGood)
+        {
+            for(String path : Configurations.testImages)
+            {
+                File file = new File(path);
+                if(!file.exists())
+                {
+                    Toast.makeText(this, path + " doesn't exists - in testImages!", Toast.LENGTH_LONG).show();
+                    isGood = false;
+                    break;
+                }
+            }
+        }
+        return isGood;
     }
 }
