@@ -10,9 +10,10 @@ public interface Configurations
 
     boolean USE_EXTRA_SPACE_IN_BIG_INTS = false;
 
-    String UFACE_DATA_ADDRESS = "10.106.50.72:3000";
-    String UFACE_BANK_ADDRESS = "10.106.50.72:3001";
-    String UFACE_KEY_ADDRESS = "10.106.50.72:3002";
+    String UFACE_BASE_ADDRESS = "10.106.50.84";
+    String UFACE_DATA_ADDRESS = UFACE_BASE_ADDRESS + ":" + "3000";
+    String UFACE_BANK_ADDRESS = UFACE_BASE_ADDRESS + ":" + "3001";
+    String UFACE_KEY_ADDRESS = UFACE_BASE_ADDRESS + ":" + "3002";
 
     String UFACE_PUBLIC_KEY = "public_key";
     String UFACE_PUBLIC_KEY_NAME = "Public";
@@ -28,8 +29,8 @@ public interface Configurations
     String UFACE_REGISTRATION_PASSWORD = "add_password";
     String UFACE_AUTHENTICATE_USER = "authenticate_user";
     String UFACE_AUTHENTICATE_PASSWORD = "authenticate_password";
-    String UFACE_AUTHENTICATION_RESULT = "authentication_result_client";
     String TIME_KEY = "Time";
+    String UFACE_AUTHENTICATION_RESULT = "authentication_result_client";
 
     int GRID_ROWS = 4;
     int GRID_COLS = GRID_ROWS;
@@ -57,7 +58,7 @@ public interface Configurations
 
     String path = "/storage/emulated/0/Android/data/com.stuff.nsh9b3.ufaceandroid/files/Pictures/";
     String[] origImages = new String[]{
-            path + "Abira-c-1.jpeg",
+            //path + "Abira-c-1.jpeg",
             //path + "Adam-c-1.jpg",
             //path + "Ande-c-1.jpeg",
             //path + "Atoosa-c-1.jpg",
@@ -67,19 +68,16 @@ public interface Configurations
             //path + "Dude-c-1.jpg",
             //path + "Hug-c-1.jpg",
             //path + "Jess-c-1.jpg",
-            //path + "Jiang-c-1.jpg",
-            //path + "Joe-c-1.jpg",
-            //path + "Kat-c-1.jpg",
-            //path + "Kyle-c-1.jpg",
-            //path + "Luke-c-1.jpg",
-            //path + "Mel-c-1.jpg",
-            //path + "Mike-c-1.jpg",
-            //path + "Nick-c-1.jpg",
-            //path + "Rand-c-1.jpg",
-            //path + "Sahi-c-1.jpg",
-            //path + "Sam-c-1.jpg",
-            //path + "Scott-c-1.jpg",
-            //path + "Snehi-c-1.jpg"
+            path + "Jiang-c-1.jpg",
+            path + "Kat-c-1.jpg",
+            path + "Kyle-c-1.jpg",
+            path + "Mel-c-1.jpg",
+            path + "Mike-c-1.jpg",
+            path + "Nick-c-1.jpg",
+            path + "Rand-c-1.jpg",
+            path + "Sahi-c-1.jpg",
+            path + "Sam-c-1.jpg",
+            path + "Snehi-c-1.jpg"
     };
     String[] testImages = new String[]{
             path + "Abira-c-2.jpeg",
@@ -104,14 +102,10 @@ public interface Configurations
             path + "Jess-z-1.jpg",
             path + "Jiang-c-2.jpg",
             path + "Jiang-z-1.jpg",
-            path + "Joe-c-2.jpg",
-            path + "Joe-z-1.jpg",
             path + "Kat-c-2.jpg",
             path + "Kat-z-1.jpg",
             path + "Kyle-c-2.jpg",
             path + "Kyle-z-1.jpg",
-            path + "Luke-c-2.jpg",
-            path + "Luke-z-1.jpg",
             path + "Mel-c-2.jpg",
             path + "Mel-z-1.jpg",
             path + "Mike-c-2.jpg",
@@ -124,8 +118,6 @@ public interface Configurations
             path + "Sahi-z-1.jpg",
             path + "Sam-c-2.jpg",
             path + "Sam-z-1.jpg",
-            path + "Scott-c-2.jpg",
-            path + "Scott-z-1.jpg",
             path + "Snehi-c-2.jpg",
             path + "Snehi-z-1.jpg"
     };

@@ -61,6 +61,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         getServices();
 
+        try
+        {
+            File timeSheet = Utilities.createTimeSheet(this);
+
+            FileWriter fWriter;
+            fWriter = new FileWriter(timeSheet, true);
+            fWriter.write("Starting Tests!\n");
+            fWriter.flush();
+            fWriter.close();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
         paillier = null;
         GetPublicKey getPublicKey = new GetPublicKey(this, paillier);
         getPublicKey.execute();
